@@ -25,7 +25,7 @@ class GestureDetectorPage extends StatelessWidget {
   Widget build(BuildContext context) {
     return Scaffold(
       body: Container(
-        color: Colors.blueGrey[100],
+        color: Colors.grey.shade200,
         width: double.infinity,
         height: double.infinity,
         child: MainContent(),
@@ -116,7 +116,7 @@ class _RoomMapState extends State<RoomMap> {
             });
           },
           child: Container(
-            color: Colors.lightBlue.shade200,
+            color: Colors.yellow.shade100,
             child: Image.asset('assets/images/room4.png'),
           ),
         ),
