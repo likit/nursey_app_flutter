@@ -1,0 +1,14 @@
+{ "columns":11,
+ "image":"room4.png",
+ "imageheight":384,
+ "imagewidth":352,
+ "margin":0,
+ "name":"room4",
+ "spacing":0,
+ "tilecount":132,
+ "tiledversion":"1.4.3",
+ "tileheight":32,
+ "tilewidth":32,
+ "type":"tileset",
+ "version":1.4
+}
