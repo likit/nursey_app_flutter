@@ -90,8 +90,8 @@ class _RoomMapState extends State<RoomMap> {
                   child: Text(
                     this.itemLabel,
                     style: TextStyle(
-                      fontSize: 24,
-                      fontWeight: FontWeight.w500,
+                      fontSize: 22,
+                      fontFamily: 'Itim',
                       color: Colors.white,
                     ),
                   ),
