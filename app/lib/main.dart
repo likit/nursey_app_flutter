@@ -1,8 +1,8 @@
-import 'package:flutter/gestures.dart';
+import 'package:bonfire_test/screens/map.dart';
+import 'package:bonfire_test/screens/scenario_list.dart';
+import 'package:bonfire_test/screens/lesson_list.dart';
 import 'package:flutter/material.dart';
-import 'item_container.dart';
-import 'login_screen.dart';
-import 'screens/lesson_list.dart';
+import 'package:bonfire_test/login_screen.dart';
 import 'package:firebase_core/firebase_core.dart';
 
 void main() async {
@@ -21,6 +21,8 @@ class MyApp extends StatelessWidget {
       routes: {
         '/login': (context)=>LoginScreen(),
         '/lessons': (context)=>LessonScreen(),
+        '/scenarios': (context)=>ScenarioScreen(),
+        '/map': (context)=>MapScreen(),
       },
       theme: ThemeData(
         primarySwatch: Colors.purple,
@@ -29,132 +31,3 @@ class MyApp extends StatelessWidget {
   }
 }
 
-class GestureDetectorPage extends StatelessWidget {
-  @override
-  Widget build(BuildContext context) {
-    return Scaffold(
-      body: Container(
-        color: Colors.grey.shade200,
-        width: double.infinity,
-        height: double.infinity,
-        child: MainContent(),
-      ),
-    );
-  }
-}
-
-class MainContent extends StatefulWidget {
-  @override
-  _MainContentState createState() => _MainContentState();
-}
-
-class _MainContentState extends State<MainContent> {
-
-  @override
-  Widget build(BuildContext context) {
-    return Container(
-      child: Center(
-        child: Column(
-          mainAxisAlignment: MainAxisAlignment.center,
-          children: [
-            RoomMap(),
-          ],
-        ),
-      ),
-    );
-  }
-}
-
-class RoomMap extends StatefulWidget {
-  @override
-  _RoomMapState createState() => _RoomMapState();
-}
-
-class _RoomMapState extends State<RoomMap> {
-  String startDXPoint = '';
-  String startDYPoint = '';
-  String itemLabel = '';
-
-  @override
-  Widget build(BuildContext context) {
-    return Column(
-      children: [
-        Row(
-          children: [
-            Expanded(
-              child: Container(
-                height: 70,
-                margin: EdgeInsets.all(8.0),
-                alignment: Alignment.center,
-                decoration: BoxDecoration(
-                  borderRadius: BorderRadius.circular(18.0),
-                  color: Colors.brown.shade300,
-                  border: Border.all(color: Colors.brown.shade700, width: 8),
-                  boxShadow: [
-                    BoxShadow(spreadRadius: 5.0, color: Colors.grey.withOpacity(0.5), blurRadius: 7, offset: Offset(0, 3)),
-                  ]
-                ),
-                child: Padding(
-                  padding: const EdgeInsets.all(4.0),
-                  child: Text(
-                    this.itemLabel,
-                    style: TextStyle(
-                      fontSize: 22,
-                      fontFamily: 'Itim',
-                      color: Colors.white,
-                    ),
-                  ),
-                ),
-              ),
-            ),
-            SizedBox(
-              height: 50,
-            )
-          ],
-        ),
-        GestureDetector(
-          dragStartBehavior: DragStartBehavior.start,
-          behavior: HitTestBehavior.translucent,
-          onTapDown: (TapDownDetails details) {
-            RenderBox getBox = context.findRenderObject();
-            var local = getBox.globalToLocal(details.globalPosition);
-            setState(() {
-              this.itemLabel = checkItem(local);
-              this.startDXPoint = '${local.dx.floorToDouble()}';
-              this.startDYPoint = '${local.dy.floorToDouble()}';
-            });
-          },
-          child: Container(
-            color: Colors.yellow.shade100,
-            child: Image.asset('assets/images/room4.png'),
-          ),
-        ),
-        Text(
-          'Start DX point: ${this.startDXPoint}',
-          style: TextStyle(
-            fontSize: 30,
-            fontWeight: FontWeight.w500,
-          ),
-        ),
-        Text(
-          'Start DY point: ${this.startDYPoint}',
-          style: TextStyle(
-            fontSize: 30,
-            fontWeight: FontWeight.w500,
-          ),
-        ),
-      ],
-    );
-  }
-  String checkItem(var localPosition) {
-    double localx = localPosition.dx.floorToDouble();
-    double localy = localPosition.dy.floorToDouble();
-    String label = '';
-    for (ItemContainer con in itemContainers) {
-      if(localx.floorToDouble().clamp(con.x1, con.x2) == localx && localy.floorToDouble().clamp(con.y1, con.y2) == localy) {
-        return con.label;
-      }
-    }
-    return label;
-  }
-}

@@ -55,21 +55,26 @@ class _LessonListState extends State<LessonList> {
         } else {
           return ListView(
             children: snapshot.data.docs.map((doc) {
-              return Card(
-                child: ListTile(
-                  leading: Icon(Icons.book),
-                  trailing: doc.data()['isPracticeMode'] == 'no'
-                      ? Icon(Icons.lock_clock)
-                      : null,
-                  title: Text(
-                    doc.data()['name'],
-                    style: kAppTextStyle,
+              return GestureDetector(
+                onTap: () {
+                  Navigator.pushNamed(context, '/scenarios');
+                },
+                child: Card(
+                  child: ListTile(
+                    leading: Icon(Icons.book),
+                    trailing: doc.data()['isPracticeMode'] == 'no'
+                        ? Icon(Icons.lock_clock)
+                        : null,
+                    title: Text(
+                      doc.data()['name'],
+                      style: kAppTextStyle,
+                    ),
+                    subtitle: Text(
+                      doc.data()['objective'],
+                      style: kAppSubTextStyle,
+                    ),
+                    isThreeLine: true,
                   ),
-                  subtitle: Text(
-                    doc.data()['objective'],
-                    style: kAppSubTextStyle,
-                  ),
-                  isThreeLine: true,
                 ),
               );
             }).toList(),
