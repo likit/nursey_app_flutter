@@ -64,8 +64,17 @@ class LoginForm extends StatefulWidget {
 class _LoginFormState extends State<LoginForm> {
   final _formKey = GlobalKey<FormState>();
   final Function signInMethod;
+  final _emailController = TextEditingController();
+  final _passwordController = TextEditingController();
 
   _LoginFormState({this.signInMethod});
+
+  @override
+  void dispose() {
+    _emailController.dispose();
+    _passwordController.dispose();
+    super.dispose();
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -76,6 +85,22 @@ class _LoginFormState extends State<LoginForm> {
         child: Column(
           children: [
             TextFormField(
+              decoration: InputDecoration(
+                hintText: 'Email',
+              ),
+              controller: _emailController,
+              validator: (value) {
+                if (value.isEmpty) {
+                  return 'Enter your email';
+                }
+                return null;
+              },
+            ),
+            TextFormField(
+              decoration: InputDecoration(
+                hintText: 'Password',
+              ),
+              controller: _passwordController,
               validator: (value) {
                 if (value.isEmpty) {
                   return 'Enter your email';
@@ -100,11 +125,9 @@ class _LoginFormState extends State<LoginForm> {
                       print('Valid email');
                       try {
                         UserCredential userCredential = await FirebaseAuth.instance.signInWithEmailAndPassword(
-                          email: "donsanova@gmail.com",
-                          password: "genius01",
+                          email: _emailController.text,
+                          password: _passwordController.text,
                         );
-                        print('You have just logged in');
-                        print(userCredential.user);
                       } on FirebaseAuthException catch (e) {
                         if (e.code == 'user-not-found') {
                           print('No user found for that email.');
