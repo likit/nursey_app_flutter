@@ -1,9 +1,6 @@
 import 'package:flutter/material.dart';
 import 'constants.dart';
-import 'constants.dart';
-import 'constants.dart';
 import 'widgets/themedContainer.dart';
-import 'constants.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 
 class LoginScreen extends StatelessWidget {
@@ -195,7 +192,7 @@ class _LoginFormState extends State<LoginForm> {
             actions: [
               RaisedButton(
                   color: Colors.lightBlue,
-                  onPressed: () => Navigator.pop(context),
+                  onPressed: () => Navigator.pushNamed(context, '/lessons'),
                   child: Padding(
                     padding: const EdgeInsets.all(8.0),
                     child: Text(

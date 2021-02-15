@@ -2,6 +2,7 @@ import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
 import 'item_container.dart';
 import 'login_screen.dart';
+import 'screens/lesson_list.dart';
 import 'package:firebase_core/firebase_core.dart';
 
 void main() async {
@@ -16,10 +17,14 @@ class MyApp extends StatelessWidget {
   Widget build(BuildContext context) {
     return MaterialApp(
       title: 'Flutter Demo',
+      initialRoute: '/login',
+      routes: {
+        '/login': (context)=>LoginScreen(),
+        '/lessons': (context)=>LessonScreen(),
+      },
       theme: ThemeData(
         primarySwatch: Colors.purple,
       ),
-      home: LoginScreen(),
     );
   }
 }
