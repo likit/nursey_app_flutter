@@ -9,31 +9,32 @@ class LoginScreen extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      body: SafeArea(
-        child: Padding(
-          padding: const EdgeInsets.all(8.0),
-          child: Column(
-            mainAxisAlignment: MainAxisAlignment.start,
-            children: [
-              ThemedContainer(
-                height: 70,
-                child: Text(
-                  'Login',
-                  style: kAppTitleTextStyle,
-                ),
+      body: Padding(
+        padding: const EdgeInsets.all(8.0),
+        child: Column(
+          mainAxisAlignment: MainAxisAlignment.start,
+          children: [
+            ThemedContainer(
+              height: 70,
+              child: Text(
+                'Login',
+                style: kAppTitleTextStyle,
               ),
-              SizedBox(
-                height: 30.0,
-              ),
-              LoginForm(
+            ),
+            SizedBox(
+              height: 30.0,
+            ),
+            Padding(
+              padding: const EdgeInsets.all(20.0),
+              child: LoginForm(
                 signInMethod: logIn,
               ),
-              Text(
-                'กรุณาลงชื่อเข้าใช้งานหรือลงทะเบียนเพื่อใช้งาน',
-                style: kAppTextStyle,
-              )
-            ],
-          ),
+            ),
+            Text(
+              'กรุณาลงชื่อเข้าใช้งานหรือลงทะเบียนเพื่อใช้งาน',
+              style: kAppTextStyle,
+            )
+          ],
         ),
       ),
     );
