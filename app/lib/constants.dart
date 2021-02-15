@@ -6,6 +6,11 @@ const TextStyle kAppTextStyle = TextStyle(
   fontSize: 20.0,
 );
 
+const TextStyle kAppSubTextStyle = TextStyle(
+  fontFamily: 'Itim',
+  fontSize: 16.0,
+);
+
 const TextStyle kAppTitleTextStyle = TextStyle(
   fontFamily: 'Itim',
   fontSize: 26.0,
