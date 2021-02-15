@@ -122,11 +122,14 @@ class _LoginFormState extends State<LoginForm> {
             Row(
               mainAxisAlignment: MainAxisAlignment.center,
               children: [
-                FlatButton(
+                RaisedButton(
                   color: Colors.pinkAccent,
-                  child: Text(
-                    'Log In',
-                    style: kAppTextStyle,
+                  child: Padding(
+                    padding: const EdgeInsets.all(8.0),
+                    child: Text(
+                      'Log In',
+                      style: kAppTextStyle,
+                    ),
                   ),
                   onPressed: () async {
                     if (_formKey.currentState.validate()) {
@@ -155,11 +158,14 @@ class _LoginFormState extends State<LoginForm> {
                 SizedBox(
                   width: 10,
                 ),
-                FlatButton(
-                  color: Colors.yellow,
-                  child: Text(
-                    'Register',
-                    style: kAppTextStyle,
+                RaisedButton(
+                  color: Colors.lightBlue,
+                  child: Padding(
+                    padding: const EdgeInsets.all(8.0),
+                    child: Text(
+                      'Register',
+                      style: kAppTextStyle,
+                    ),
                   ),
                   onPressed: () {},
                 ),
@@ -187,11 +193,15 @@ class _LoginFormState extends State<LoginForm> {
               ),
             ),
             actions: [
-              FlatButton(
+              RaisedButton(
+                  color: Colors.lightBlue,
                   onPressed: () => Navigator.pop(context),
-                  child: Text(
-                    'Ok',
-                    style: kAppTextStyle,
+                  child: Padding(
+                    padding: const EdgeInsets.all(8.0),
+                    child: Text(
+                      'Ok',
+                      style: kAppTextStyle,
+                    ),
                   ))
             ],
           );
@@ -214,11 +224,15 @@ class _LoginFormState extends State<LoginForm> {
               ),
             ),
             actions: [
-              FlatButton(
+              RaisedButton(
+                color: Colors.grey,
                 onPressed: () => Navigator.pop(context),
-                child: Text(
-                  'Try Again',
-                  style: kAppTextStyle,
+                child: Padding(
+                  padding: const EdgeInsets.all(8.0),
+                  child: Text(
+                    'Try Again',
+                    style: kAppTextStyle,
+                  ),
                 ),
               ),
             ],
