@@ -1,38 +1,72 @@
 import 'package:flutter/material.dart';
+import 'widgets/themedContainer.dart';
 import 'constants.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 
 class LoginScreen extends StatelessWidget {
+
+  final FirebaseAuth auth = FirebaseAuth.instance;
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(
-        title: Text('Login', style: kAppTitleTextStyle,),
-      ),
-      body: Center(
-        child: Column(
-          mainAxisAlignment: MainAxisAlignment.start,
-          children: [
-            SizedBox(
-              height: 50.0,
-            ),
-            LoginForm(),
-            Text('กรุณาลงชื่อเข้าใช้งานหรือลงทะเบียนเพื่อใช้งาน', style: kAppTextStyle,)
-          ],
+      body: SafeArea(
+        child: Padding(
+          padding: const EdgeInsets.all(8.0),
+          child: Column(
+            mainAxisAlignment: MainAxisAlignment.start,
+            children: [
+              ThemedContainer(
+                height: 70,
+                child: Text('Login', style: kAppTitleTextStyle,),
+              ),
+              SizedBox(
+                height: 30.0,
+              ),
+              LoginForm(
+                signInMethod: logIn,
+              ),
+              Text(
+                'กรุณาลงชื่อเข้าใช้งานหรือลงทะเบียนเพื่อใช้งาน',
+                style: kAppTextStyle,
+              )
+            ],
+          ),
         ),
       ),
     );
   }
+
+  void logIn() async {
+    try {
+      UserCredential userCredential = await FirebaseAuth.instance.signInWithEmailAndPassword(
+        email: "donsanova@gmail.com",
+        password: "genius01",
+      );
+    } on FirebaseAuthException catch (e) {
+      if (e.code == 'user-not-found') {
+        print('No user found for that email.');
+      } else if (e.code == 'wrong-password') {
+        print('Wrong password provided for that user.');
+      }
+    }
+  }
 }
 
-
 class LoginForm extends StatefulWidget {
+  final Function signInMethod;
+
+  const LoginForm({Key key, this.signInMethod}) : super(key: key);
   @override
-  _LoginFormState createState() => _LoginFormState();
+  _LoginFormState createState() => _LoginFormState(signInMethod: signInMethod);
 }
 
 class _LoginFormState extends State<LoginForm> {
-
   final _formKey = GlobalKey<FormState>();
+  final Function signInMethod;
+
+  _LoginFormState({this.signInMethod});
+
   @override
   Widget build(BuildContext context) {
     return Padding(
@@ -61,9 +95,25 @@ class _LoginFormState extends State<LoginForm> {
                     'Log In',
                     style: kAppTextStyle,
                   ),
-                  onPressed: () {
+                  onPressed: () async {
                     if (_formKey.currentState.validate()) {
-                      print('Logged in.');
+                      print('Valid email');
+                      try {
+                        UserCredential userCredential = await FirebaseAuth.instance.signInWithEmailAndPassword(
+                          email: "donsanova@gmail.com",
+                          password: "genius01",
+                        );
+                        print('You have just logged in');
+                        print(userCredential.user);
+                      } on FirebaseAuthException catch (e) {
+                        if (e.code == 'user-not-found') {
+                          print('No user found for that email.');
+                        } else if (e.code == 'wrong-password') {
+                          print('Wrong password provided for that user.');
+                        } else {
+                          print(e.code);
+                        }
+                      }
                     } else {
                       print('Invalid email address.');
                     }
@@ -88,4 +138,3 @@ class _LoginFormState extends State<LoginForm> {
     );
   }
 }
-

@@ -9,4 +9,6 @@ const TextStyle kAppTextStyle = TextStyle(
 const TextStyle kAppTitleTextStyle = TextStyle(
   fontFamily: 'Itim',
   fontSize: 26.0,
+  color: Colors.white,
 );
+
