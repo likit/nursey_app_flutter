@@ -1,10 +1,12 @@
 import 'package:flutter/material.dart';
+import 'constants.dart';
+import 'constants.dart';
+import 'constants.dart';
 import 'widgets/themedContainer.dart';
 import 'constants.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 
 class LoginScreen extends StatelessWidget {
-
   final FirebaseAuth auth = FirebaseAuth.instance;
 
   @override
@@ -18,7 +20,10 @@ class LoginScreen extends StatelessWidget {
             children: [
               ThemedContainer(
                 height: 70,
-                child: Text('Login', style: kAppTitleTextStyle,),
+                child: Text(
+                  'Login',
+                  style: kAppTitleTextStyle,
+                ),
               ),
               SizedBox(
                 height: 30.0,
@@ -39,7 +44,8 @@ class LoginScreen extends StatelessWidget {
 
   void logIn() async {
     try {
-      UserCredential userCredential = await FirebaseAuth.instance.signInWithEmailAndPassword(
+      UserCredential userCredential =
+          await FirebaseAuth.instance.signInWithEmailAndPassword(
         email: "donsanova@gmail.com",
         password: "genius01",
       );
@@ -85,6 +91,7 @@ class _LoginFormState extends State<LoginForm> {
         child: Column(
           children: [
             TextFormField(
+              autofocus: true,
               decoration: InputDecoration(
                 hintText: 'Email',
               ),
@@ -101,6 +108,7 @@ class _LoginFormState extends State<LoginForm> {
                 hintText: 'Password',
               ),
               controller: _passwordController,
+              obscureText: true,
               validator: (value) {
                 if (value.isEmpty) {
                   return 'Enter your email';
@@ -122,19 +130,21 @@ class _LoginFormState extends State<LoginForm> {
                   ),
                   onPressed: () async {
                     if (_formKey.currentState.validate()) {
-                      print('Valid email');
                       try {
-                        UserCredential userCredential = await FirebaseAuth.instance.signInWithEmailAndPassword(
+                        UserCredential userCredential = await FirebaseAuth
+                            .instance
+                            .signInWithEmailAndPassword(
                           email: _emailController.text,
                           password: _passwordController.text,
                         );
+                        _showAlertDialog();
                       } on FirebaseAuthException catch (e) {
                         if (e.code == 'user-not-found') {
-                          print('No user found for that email.');
+                          _showFailedLoginDialog(e.code);
                         } else if (e.code == 'wrong-password') {
-                          print('Wrong password provided for that user.');
+                          _showFailedLoginDialog(e.code);
                         } else {
-                          print(e.code);
+                          _showFailedLoginDialog(e.code);
                         }
                       }
                     } else {
@@ -159,5 +169,60 @@ class _LoginFormState extends State<LoginForm> {
         ),
       ),
     );
+  }
+
+  void _showAlertDialog() {
+    showDialog(
+        context: context,
+        builder: (BuildContext context) {
+          return AlertDialog(
+            title: Text(
+              'Login Status',
+              style: kAppTextStyle,
+            ),
+            content: Container(
+              child: Text(
+                'ลงชื่อเข้าใช้งานเรียบร้อย',
+                style: kAppTextStyle,
+              ),
+            ),
+            actions: [
+              FlatButton(
+                  onPressed: () => Navigator.pop(context),
+                  child: Text(
+                    'Ok',
+                    style: kAppTextStyle,
+                  ))
+            ],
+          );
+        });
+  }
+
+  void _showFailedLoginDialog(String msg) {
+    showDialog(
+        context: context,
+        builder: (BuildContext context) {
+          return AlertDialog(
+            title: Text(
+              'Login Status',
+              style: kAppTextStyle,
+            ),
+            content: Container(
+              child: Text(
+                msg,
+                style: kAppTextStyle,
+              ),
+            ),
+            actions: [
+              FlatButton(
+                onPressed: () => Navigator.pop(context),
+                child: Text(
+                  'Try Again',
+                  style: kAppTextStyle,
+                ),
+              ),
+            ],
+          );
+        });
   }
 }
