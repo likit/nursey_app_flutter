@@ -4,6 +4,14 @@ import 'package:flutter/widgets.dart';
 import 'package:bonfire_test/constants.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 
+class ScenarioArguments {
+  final String id;
+  final String title;
+  final int numItems;
+
+  ScenarioArguments(this.id, this.title, this.numItems);
+}
+
 class ScenarioScreen extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
@@ -90,7 +98,12 @@ class _ScenarioListState extends State<ScenarioList> {
             children: snapshot.data.docs.map((doc) {
               return GestureDetector(
                 onTap: () {
-                  print('I was tapped.');
+                  Navigator.pushNamed(
+                    context,
+                    '/playmap',
+                    arguments: ScenarioArguments(doc.id, doc.data()['title'],
+                        doc.data()['answers'].length),
+                  );
                 },
                 child: Card(
                   child: ListTile(

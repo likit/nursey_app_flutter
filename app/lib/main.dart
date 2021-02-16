@@ -1,6 +1,7 @@
 import 'package:bonfire_test/screens/map.dart';
 import 'package:bonfire_test/screens/scenario_list.dart';
 import 'package:bonfire_test/screens/lesson_list.dart';
+import 'screens/play_map.dart';
 import 'package:flutter/material.dart';
 import 'package:bonfire_test/login_screen.dart';
 import 'package:firebase_core/firebase_core.dart';
@@ -23,6 +24,7 @@ class MyApp extends StatelessWidget {
         '/lessons': (context)=>LessonScreen(),
         '/scenarios': (context)=>ScenarioScreen(),
         '/map': (context)=>MapScreen(),
+        '/playmap': (context)=>PlayMapScreen(),
       },
       theme: ThemeData(
         primarySwatch: Colors.purple,
