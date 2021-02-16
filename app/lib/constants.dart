@@ -17,3 +17,9 @@ const TextStyle kAppTitleTextStyle = TextStyle(
   color: Colors.white,
 );
 
+const TextStyle kAppScenarioTitleTextStyle = TextStyle(
+  fontFamily: 'Itim',
+  fontSize: 18.0,
+  color: Colors.white,
+);
+
