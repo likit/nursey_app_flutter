@@ -1,3 +1,4 @@
+import 'package:bonfire_test/screens/container_items.dart';
 import 'package:bonfire_test/screens/map.dart';
 import 'package:bonfire_test/screens/scenario_list.dart';
 import 'package:bonfire_test/screens/lesson_list.dart';
@@ -25,6 +26,7 @@ class MyApp extends StatelessWidget {
         '/scenarios': (context)=>ScenarioScreen(),
         '/map': (context)=>MapScreen(),
         '/playmap': (context)=>PlayMapScreen(),
+        '/container-item': (context)=>ContainerItem(),
       },
       theme: ThemeData(
         primarySwatch: Colors.purple,

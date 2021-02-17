@@ -2,6 +2,15 @@ import 'package:bonfire_test/constants.dart';
 import 'package:flutter/material.dart';
 import 'package:bonfire_test/item_container.dart';
 import 'package:flutter/gestures.dart';
+import 'package:tuple/tuple.dart';
+
+String sceneId = '';
+
+class ScenarioArguments {
+  final String id;
+
+  ScenarioArguments(this.id);
+}
 
 class MapScreen extends StatelessWidget {
   @override
@@ -31,13 +40,39 @@ class _MainContentState extends State<MainContent> {
           mainAxisAlignment: MainAxisAlignment.center,
           children: [
             RoomMap(),
-            RaisedButton(
-              color: Colors.lightBlueAccent,
-              onPressed: ()=>Navigator.pop(context),
-              child: Padding(
-                padding: const EdgeInsets.all(8.0),
-                child: Text('กลับ', style: kAppTextStyle,),
-              ),
+            Row(
+              mainAxisAlignment: MainAxisAlignment.center,
+              children: [
+                RaisedButton(
+                  color: Colors.lightBlueAccent,
+                  onPressed: () => Navigator.pop(context),
+                  child: Padding(
+                    padding: const EdgeInsets.all(8.0),
+                    child: Text(
+                      'กลับ',
+                      style: kAppTextStyle,
+                    ),
+                  ),
+                ),
+                SizedBox(
+                  width: 10,
+                ),
+                RaisedButton(
+                  color: Colors.pinkAccent,
+                  onPressed: () => Navigator.pushNamed(
+                    context,
+                    '/container-item',
+                    arguments: ScenarioArguments(sceneId),
+                  ),
+                  child: Padding(
+                    padding: const EdgeInsets.all(8.0),
+                    child: Text(
+                      'ดูอุปกรณ์',
+                      style: kAppTextStyle,
+                    ),
+                  ),
+                ),
+              ],
             )
           ],
         ),
@@ -55,10 +90,7 @@ class _RoomMapState extends State<RoomMap> {
   String startDXPoint = '';
   String startDYPoint = '';
   String itemLabel = '';
-  String imageXPosition = '';
-  String imageYPosition = '';
   GlobalKey _keyMapImage = GlobalKey();
-
 
   @override
   Widget build(BuildContext context) {
@@ -76,13 +108,16 @@ class _RoomMapState extends State<RoomMap> {
                     color: Colors.brown.shade300,
                     border: Border.all(color: Colors.brown.shade700, width: 8),
                     boxShadow: [
-                      BoxShadow(spreadRadius: 5.0, color: Colors.grey.withOpacity(0.5), blurRadius: 7, offset: Offset(0, 3)),
-                    ]
-                ),
+                      BoxShadow(
+                          spreadRadius: 5.0,
+                          color: Colors.grey.withOpacity(0.5),
+                          blurRadius: 7,
+                          offset: Offset(0, 3)),
+                    ]),
                 child: Padding(
                   padding: const EdgeInsets.all(4.0),
                   child: Text(
-                    this.itemLabel != '' ? this.itemLabel : 'คลิกที่แผนที่เพื่อสำรวจห้อง',
+                    'แผนที่หอผู้ป่วย',
                     style: TextStyle(
                       fontSize: 22,
                       fontFamily: 'Itim',
@@ -104,7 +139,9 @@ class _RoomMapState extends State<RoomMap> {
             RenderBox imageBox = _keyMapImage.currentContext.findRenderObject();
             var local = imageBox.globalToLocal(details.globalPosition);
             setState(() {
-              this.itemLabel = checkItem(local);
+              Tuple2 _container = checkItem(local);
+              this.itemLabel = _container.item1;
+              sceneId = _container.item2;
               this.startDXPoint = '${local.dx.floorToDouble()}';
               this.startDYPoint = '${local.dy.floorToDouble()}';
             });
@@ -129,32 +166,27 @@ class _RoomMapState extends State<RoomMap> {
             fontWeight: FontWeight.w500,
           ),
         ),
-        Text(
-          'Image X point: ${this.imageXPosition}',
-          style: TextStyle(
-            fontSize: 30,
-            fontWeight: FontWeight.w500,
-          ),
-        ),
-        Text(
-          'Image Y point: ${this.imageYPosition}',
-          style: TextStyle(
-            fontSize: 30,
-            fontWeight: FontWeight.w500,
+        Padding(
+          padding: const EdgeInsets.all(8.0),
+          child: Text(
+            this.itemLabel != '' ? '${this.itemLabel}' : 'กรุณาคลิกที่อื่น',
+            style: kAppItemTextStyle,
           ),
         ),
       ],
     );
   }
-  String checkItem(var localPosition) {
+
+  Tuple2 checkItem(var localPosition) {
     double localx = localPosition.dx.floorToDouble();
     double localy = localPosition.dy.floorToDouble();
     String label = '';
     for (ItemContainer con in itemContainers) {
-      if(localx.floorToDouble().clamp(con.x1, con.x2) == localx && localy.floorToDouble().clamp(con.y1, con.y2) == localy) {
-        return con.label;
+      if (localx.floorToDouble().clamp(con.x1, con.x2) == localx &&
+          localy.floorToDouble().clamp(con.y1, con.y2) == localy) {
+        return Tuple2<String, String>(con.label, con.id);
       }
     }
-    return label;
+    return Tuple2<String, String>(label, '');
   }
 }
