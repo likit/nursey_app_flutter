@@ -44,7 +44,18 @@ class _MainContentState extends State<MainContent> {
                   style: kAppTextStyle,
                 ),
               ),
-            )
+            ),
+            RaisedButton(
+              color: Colors.pink,
+              onPressed: () => Navigator.pop(context),
+              child: Padding(
+                padding: const EdgeInsets.all(8.0),
+                child: Text(
+                  'สำเร็จ',
+                  style: kAppTextStyle,
+                ),
+              ),
+            ),
           ],
         ),
       ),
