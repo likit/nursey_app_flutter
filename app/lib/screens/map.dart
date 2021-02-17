@@ -23,7 +23,6 @@ class MainContent extends StatefulWidget {
 }
 
 class _MainContentState extends State<MainContent> {
-
   @override
   Widget build(BuildContext context) {
     return Container(
@@ -56,6 +55,10 @@ class _RoomMapState extends State<RoomMap> {
   String startDXPoint = '';
   String startDYPoint = '';
   String itemLabel = '';
+  String imageXPosition = '';
+  String imageYPosition = '';
+  GlobalKey _keyMapImage = GlobalKey();
+
 
   @override
   Widget build(BuildContext context) {
@@ -98,8 +101,8 @@ class _RoomMapState extends State<RoomMap> {
           dragStartBehavior: DragStartBehavior.start,
           behavior: HitTestBehavior.translucent,
           onTapDown: (TapDownDetails details) {
-            RenderBox getBox = context.findRenderObject();
-            var local = getBox.globalToLocal(details.globalPosition);
+            RenderBox imageBox = _keyMapImage.currentContext.findRenderObject();
+            var local = imageBox.globalToLocal(details.globalPosition);
             setState(() {
               this.itemLabel = checkItem(local);
               this.startDXPoint = '${local.dx.floorToDouble()}';
@@ -107,6 +110,7 @@ class _RoomMapState extends State<RoomMap> {
             });
           },
           child: Container(
+            key: _keyMapImage,
             color: Colors.yellow.shade100,
             child: Image.asset('assets/images/room4.png'),
           ),
@@ -120,6 +124,20 @@ class _RoomMapState extends State<RoomMap> {
         ),
         Text(
           'Start DY point: ${this.startDYPoint}',
+          style: TextStyle(
+            fontSize: 30,
+            fontWeight: FontWeight.w500,
+          ),
+        ),
+        Text(
+          'Image X point: ${this.imageXPosition}',
+          style: TextStyle(
+            fontSize: 30,
+            fontWeight: FontWeight.w500,
+          ),
+        ),
+        Text(
+          'Image Y point: ${this.imageYPosition}',
           style: TextStyle(
             fontSize: 30,
             fontWeight: FontWeight.w500,
