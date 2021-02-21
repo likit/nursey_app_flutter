@@ -5,6 +5,11 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:bonfire_test/item_container.dart';
 import 'package:flutter/gestures.dart';
+import 'package:tuple/tuple.dart';
+
+//TODO: remove duplicate code.
+
+String sceneId = '';
 
 class PlayMapScreen extends StatelessWidget {
   @override
@@ -72,6 +77,7 @@ class _RoomMapState extends State<RoomMap> {
   String startDXPoint = '';
   String startDYPoint = '';
   String itemLabel = '';
+  GlobalKey _keyMapImage = GlobalKey();
 
   @override
   Widget build(BuildContext context) {
@@ -89,15 +95,19 @@ class _RoomMapState extends State<RoomMap> {
           dragStartBehavior: DragStartBehavior.start,
           behavior: HitTestBehavior.translucent,
           onTapDown: (TapDownDetails details) {
-            RenderBox getBox = context.findRenderObject();
-            var local = getBox.globalToLocal(details.globalPosition);
+            RenderBox imageBox = _keyMapImage.currentContext.findRenderObject();
+            var local = imageBox.globalToLocal(details.globalPosition);
             setState(() {
-              this.itemLabel = checkItem(local);
+              Tuple2 _container = checkItem(local);
+              this.itemLabel = _container.item1;
+              sceneId = _container.item2;
+              print(sceneId);
               this.startDXPoint = '${local.dx.floorToDouble()}';
               this.startDYPoint = '${local.dy.floorToDouble()}';
             });
           },
           child: Container(
+            key: _keyMapImage,
             color: Colors.yellow.shade100,
             child: Image.asset('assets/images/room4.png'),
           ),
@@ -113,16 +123,16 @@ class _RoomMapState extends State<RoomMap> {
     );
   }
 
-  String checkItem(var localPosition) {
+  Tuple2 checkItem(var localPosition) {
     double localx = localPosition.dx.floorToDouble();
     double localy = localPosition.dy.floorToDouble();
     String label = '';
     for (ItemContainer con in itemContainers) {
       if (localx.floorToDouble().clamp(con.x1, con.x2) == localx &&
           localy.floorToDouble().clamp(con.y1, con.y2) == localy) {
-        return con.label;
+        return Tuple2<String, String>(con.label, con.id);
       }
     }
-    return label;
+    return Tuple2<String, String>(label, '');
   }
 }
