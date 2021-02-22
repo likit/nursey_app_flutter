@@ -9,7 +9,6 @@ import 'package:tuple/tuple.dart';
 
 //TODO: remove duplicate code.
 
-String sceneId = '';
 
 class PlayMapScreen extends StatelessWidget {
   @override
@@ -78,6 +77,7 @@ class _RoomMapState extends State<RoomMap> {
   String startDYPoint = '';
   String itemLabel = '';
   GlobalKey _keyMapImage = GlobalKey();
+  String containerId = '';
 
   @override
   Widget build(BuildContext context) {
@@ -100,10 +100,16 @@ class _RoomMapState extends State<RoomMap> {
             setState(() {
               Tuple2 _container = checkItem(local);
               this.itemLabel = _container.item1;
-              sceneId = _container.item2;
-              print(sceneId);
+              containerId = _container.item2;
+              print(containerId);
               this.startDXPoint = '${local.dx.floorToDouble()}';
               this.startDYPoint = '${local.dy.floorToDouble()}';
+              Navigator.pushNamed(
+                context,
+                '/item-list',
+                arguments: ListItemArguments(
+                    sceneId: args.id, containerId: containerId),
+              );
             });
           },
           child: Container(
@@ -135,4 +141,10 @@ class _RoomMapState extends State<RoomMap> {
     }
     return Tuple2<String, String>(label, '');
   }
+}
+
+class ListItemArguments {
+  final String sceneId;
+  final String containerId;
+  ListItemArguments({this.sceneId, this.containerId});
 }
