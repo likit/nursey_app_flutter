@@ -37,6 +37,10 @@ class _ItemListState extends State<ItemList> {
                 style: kAppTextStyle,
               ),
             ),
+            Padding(
+              padding: const EdgeInsets.all(10.0),
+              child: Text('จำนวนอุปกรณ์ที่เลือก: ${selectedItems.length.toString()}', style: kAppTextStyle,),
+            ),
             Expanded(
               flex: 1,
               child: StreamBuilder<DocumentSnapshot>(
@@ -84,6 +88,7 @@ class _ItemListState extends State<ItemList> {
                                           }
                                         },
                                         child: Container(
+                                          margin: EdgeInsets.all(5),
                                           child: Column(
                                             mainAxisAlignment:
                                                 MainAxisAlignment.spaceEvenly,
@@ -110,9 +115,10 @@ class _ItemListState extends State<ItemList> {
                                           alignment: Alignment.center,
                                           decoration: BoxDecoration(
                                             color: Colors.brown.shade50,
+                                            borderRadius: BorderRadius.circular(18.0),
                                             border: Border.all(
-                                                color: Colors.black45,
-                                                width: 6),
+                                                color: Colors.brown,
+                                                width: 4),
                                           ),
                                         ),
                                       );
@@ -136,14 +142,17 @@ class _ItemListState extends State<ItemList> {
                 },
               ),
             ),
-            RaisedButton(
-              color: Colors.lightBlueAccent,
-              onPressed: () => Navigator.pop(context),
-              child: Padding(
-                padding: const EdgeInsets.all(8.0),
-                child: Text(
-                  'กลับ',
-                  style: kAppTextStyle,
+            Padding(
+              padding: const EdgeInsets.all(8.0),
+              child: RaisedButton(
+                color: Colors.lightBlueAccent,
+                onPressed: () => Navigator.pop(context),
+                child: Padding(
+                  padding: const EdgeInsets.all(8.0),
+                  child: Text(
+                    'กลับ',
+                    style: kAppTextStyle,
+                  ),
                 ),
               ),
             ),
