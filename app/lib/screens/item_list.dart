@@ -34,57 +34,63 @@ class _ItemListState extends State<ItemList> {
                 style: kAppTextStyle,
               ),
             ),
-            StreamBuilder<DocumentSnapshot>(
-              stream:
-                  firestore.collection('holders').doc(containerId).snapshots(),
-              builder: (context, snapshot) {
-                if (!snapshot.hasData) {
-                  return Center(
-                    child: CircularProgressIndicator(),
-                  );
-                } else {
-                  return ListView(
-                    scrollDirection: Axis.vertical,
-                    shrinkWrap: true,
-                    children: snapshot.data['images'].map<Widget>((imgId) {
-                      return StreamBuilder(
-                        stream: firestore
-                            .collection('images')
-                            .doc(imgId)
-                            .snapshots(),
-                        builder: (context, snapshot) {
-                          if (snapshot.hasData) {
-                              return GridView.builder(
-                                itemCount: snapshot.data['images'].length,
-                                itemBuilder: (context, index) {
-                                  return FutureBuilder(
-                                    future: storage
-                                        .ref(snapshot.data['images']['fileUrl'])
-                                        .getDownloadURL(),
-                                    builder: (context, fileUrl) {
-                                      return GestureDetector(
-                                        onTap: () {
-                                        },
-                                        child: Container(
-                                          width: 200,
-                                          height: 200,
-                                          child: Image.network(fileUrl.data),
-                                          alignment: Alignment.center,
-                                        ),
-                                      );
-                                    },
-                                  );
-                                },
-                              );
-                          } else {
-                            return Text('Error.');
-                          }
-                        },
-                      );
-                    }).toList(),
-                  );
-                }
-              },
+            Expanded(
+              flex: 1,
+              child: StreamBuilder<DocumentSnapshot>(
+                stream:
+                    firestore.collection('holders').doc(containerId).snapshots(),
+                builder: (context, snapshot) {
+                  if (!snapshot.hasData) {
+                    return Center(
+                      child: CircularProgressIndicator(),
+                    );
+                  } else {
+                    return GridView.builder(
+                      scrollDirection: Axis.horizontal,
+                      gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(crossAxisCount: 2),
+                      shrinkWrap: true,
+                      itemCount: snapshot.data['images'].length,
+                      itemBuilder: (context, index) {
+                        return StreamBuilder(
+                            stream: firestore
+                                .collection('images')
+                                .doc(snapshot.data['images'][index])
+                                .snapshots(),
+                            builder: (context, snapshot) {
+                              if (snapshot.hasData) {
+                                return FutureBuilder(
+                                  future: storage
+                                      .ref(snapshot.data['fileUrl'])
+                                      .getDownloadURL(),
+                                  builder: (context, fileUrl) {
+                                    if (snapshot.hasData) {
+                                      if (fileUrl.data != null) {
+                                        return GestureDetector(
+                                          onTap: () {},
+                                          child: Container(
+                                            width: 200,
+                                            height: 200,
+                                            child: Image.network(fileUrl.data),
+                                            alignment: Alignment.center,
+                                          ),
+                                        );
+                                      } else {
+                                        return Text('No fileUrl');
+                                      }
+                                    } else {
+                                      return Text('No fileUrl');
+                                    }
+                                  },
+                                );
+                              } else {
+                                return Text('Error.');
+                              }
+                            });
+                      },
+                    );
+                  }
+                },
+              ),
             ),
             RaisedButton(
               color: Colors.lightBlueAccent,
