@@ -17,12 +17,15 @@ class _ItemListState extends State<ItemList> {
   List<Widget> items;
   String containerId;
   String sceneId;
+  String containerName;
+  List<String> selectedItems = [];
 
   @override
   Widget build(BuildContext context) {
     final ListItemArguments args = ModalRoute.of(context).settings.arguments;
     containerId = args.containerId;
     sceneId = args.sceneId;
+    containerName = args.containerName;
     return Scaffold(
       body: SafeArea(
         child: Column(
@@ -30,55 +33,96 @@ class _ItemListState extends State<ItemList> {
             ThemedContainer(
               height: 70,
               child: Text(
-                '${sceneId}',
+                '${containerName}',
                 style: kAppTextStyle,
               ),
             ),
             Expanded(
               flex: 1,
               child: StreamBuilder<DocumentSnapshot>(
-                stream:
-                    firestore.collection('holders').doc(containerId).snapshots(),
-                builder: (context, snapshot) {
-                  if (!snapshot.hasData) {
+                stream: firestore
+                    .collection('holders')
+                    .doc(containerId)
+                    .snapshots(),
+                builder: (context, containerSnapshot) {
+                  if (!containerSnapshot.hasData) {
                     return Center(
                       child: CircularProgressIndicator(),
                     );
                   } else {
                     return GridView.builder(
                       scrollDirection: Axis.horizontal,
-                      gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(crossAxisCount: 2),
+                      gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
+                          crossAxisCount: 2),
                       shrinkWrap: true,
-                      itemCount: snapshot.data['images'].length,
+                      itemCount: containerSnapshot.data['images'].length,
                       itemBuilder: (context, index) {
                         return StreamBuilder(
                             stream: firestore
                                 .collection('images')
-                                .doc(snapshot.data['images'][index])
+                                .doc(containerSnapshot.data['images'][index])
                                 .snapshots(),
-                            builder: (context, snapshot) {
-                              if (snapshot.hasData) {
+                            builder: (context, itemSnapshot) {
+                              if (itemSnapshot.hasData) {
+                                print('---${itemSnapshot.data['fileUrl']}');
                                 return FutureBuilder(
-                                  future: storage
-                                      .ref(snapshot.data['fileUrl'])
-                                      .getDownloadURL(),
-                                  builder: (context, fileUrl) {
-                                    if (snapshot.hasData) {
-                                      if (fileUrl.data != null) {
-                                        return GestureDetector(
-                                          onTap: () {},
-                                          child: Container(
-                                            width: 200,
-                                            height: 200,
-                                            child: Image.network(fileUrl.data),
-                                            alignment: Alignment.center,
+                                  future: storage.ref(itemSnapshot.data['fileUrl']).getDownloadURL(),
+                                  builder: (context, downloadUrl) {
+                                    if (downloadUrl.hasData) {
+                                      return GestureDetector(
+                                        onTap: () {
+                                          print('selected ${itemSnapshot.data['fileUrl']} ${selectedItems.length}');
+                                          if (!selectedItems
+                                              .contains(itemSnapshot.data['fileUrl'])) {
+                                            setState(() {
+                                              selectedItems.add(itemSnapshot.data['fileUrl']);
+                                            });
+                                          } else {
+                                            setState(() {
+                                              selectedItems.remove(itemSnapshot.data['fileUrl']);
+                                            });
+                                          }
+                                        },
+                                        child: Container(
+                                          child: Column(
+                                            mainAxisAlignment:
+                                                MainAxisAlignment.spaceEvenly,
+                                            children: [
+                                              Image.network(
+                                                downloadUrl.data,
+                                                width: 180,
+                                                height: 120,
+                                              ),
+                                              selectedItems.contains(itemSnapshot.data['fileUrl'])
+                                                  ? Icon(
+                                                      Icons.check_circle,
+                                                      color: Colors.green,
+                                                      size: 40,
+                                                    )
+                                                  : Icon(
+                                                      Icons
+                                                          .check_circle_outline,
+                                                      color: Colors.grey,
+                                                      size: 40,
+                                                    ),
+                                            ],
                                           ),
-                                        );
-                                      } else {
-                                        return Text('No fileUrl');
-                                      }
+                                          alignment: Alignment.center,
+                                          decoration: BoxDecoration(
+                                            color: Colors.brown.shade50,
+                                            border: Border.all(
+                                                color: Colors.black45,
+                                                width: 6),
+                                          ),
+                                        ),
+                                      );
                                     } else {
-                                      return Text('No fileUrl');
+                                      return Center(
+                                        child: Text(
+                                          'Loading..',
+                                          style: kAppTextStyle,
+                                        ),
+                                      );
                                     }
                                   },
                                 );
