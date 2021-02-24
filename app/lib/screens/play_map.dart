@@ -1,4 +1,5 @@
 import 'package:bonfire_test/constants.dart';
+import 'package:bonfire_test/models/cart.dart';
 import 'package:bonfire_test/screens/scenario_list.dart';
 import 'package:bonfire_test/widgets/themedContainer.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
@@ -6,6 +7,7 @@ import 'package:flutter/material.dart';
 import 'package:bonfire_test/item_container.dart';
 import 'package:flutter/gestures.dart';
 import 'package:tuple/tuple.dart';
+import 'package:provider/provider.dart';
 
 //TODO: remove duplicate code.
 
@@ -31,33 +33,44 @@ class MainContent extends StatefulWidget {
 class _MainContentState extends State<MainContent> {
   @override
   Widget build(BuildContext context) {
+    var cart = context.watch<CartModel>();
     return Container(
       child: Center(
         child: Column(
           mainAxisAlignment: MainAxisAlignment.center,
           children: [
             RoomMap(),
-            RaisedButton(
-              color: Colors.lightBlueAccent,
-              onPressed: () => Navigator.pop(context),
-              child: Padding(
-                padding: const EdgeInsets.all(8.0),
-                child: Text(
-                  'กลับ',
-                  style: kAppTextStyle,
+            Row(
+              mainAxisAlignment: MainAxisAlignment.center,
+              children: [
+                RaisedButton(
+                  color: Colors.lightBlueAccent,
+                  onPressed: () => Navigator.pop(context),
+                  child: Padding(
+                    padding: const EdgeInsets.all(8.0),
+                    child: Text(
+                      'กลับ',
+                      style: kAppTextStyle,
+                    ),
+                  ),
                 ),
-              ),
-            ),
-            RaisedButton(
-              color: Colors.pink,
-              onPressed: () => Navigator.pop(context),
-              child: Padding(
-                padding: const EdgeInsets.all(8.0),
-                child: Text(
-                  'สำเร็จ',
-                  style: kAppTextStyle,
+                SizedBox(
+                  width: 10,
                 ),
-              ),
+                RaisedButton(
+                  color: Colors.red,
+                  onPressed: () {
+                    cart.clear();
+                  },
+                  child: Padding(
+                    padding: const EdgeInsets.all(8.0),
+                    child: Text(
+                      'ลบตะกร้า',
+                      style: kAppTextStyle,
+                    ),
+                  ),
+                ),
+              ],
             ),
           ],
         ),
@@ -81,6 +94,7 @@ class _RoomMapState extends State<RoomMap> {
   @override
   Widget build(BuildContext context) {
     final ScenarioArguments args = ModalRoute.of(context).settings.arguments;
+    var cart = context.watch<CartModel>();
     return Column(
       children: [
         ThemedContainer(
@@ -120,9 +134,10 @@ class _RoomMapState extends State<RoomMap> {
         ),
         Padding(
           padding: const EdgeInsets.all(12.0),
-          child: Text(
-            'จำนวนอุปกรณ์ทั้งหมดคือ ${args.numItems} ชิ้น',
-            style: kAppTextStyle,
+          child: Column(
+            children: [
+              Text('จำนวนอุปกรณ์ในตะกร้าคือ ${cart.items.length}/${args.numItems} ชิ้น', style: kAppTextStyle,),
+            ],
           ),
         ),
       ],

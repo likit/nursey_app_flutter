@@ -1,9 +1,11 @@
 import 'package:bonfire_test/constants.dart';
+import 'package:bonfire_test/models/cart.dart';
 import 'package:bonfire_test/screens/play_map.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:bonfire_test/widgets/themedContainer.dart';
 import 'package:firebase_storage/firebase_storage.dart' as firebase_storage;
+import 'package:provider/provider.dart';
 
 class ItemList extends StatefulWidget {
   @override
@@ -18,7 +20,6 @@ class _ItemListState extends State<ItemList> {
   String containerId;
   String sceneId;
   String containerName;
-  List<String> selectedItems = [];
 
   @override
   Widget build(BuildContext context) {
@@ -26,6 +27,7 @@ class _ItemListState extends State<ItemList> {
     containerId = args.containerId;
     sceneId = args.sceneId;
     containerName = args.containerName;
+    var cart = context.watch<CartModel>();
     return Scaffold(
       body: SafeArea(
         child: Column(
@@ -39,7 +41,7 @@ class _ItemListState extends State<ItemList> {
             ),
             Padding(
               padding: const EdgeInsets.all(10.0),
-              child: Text('จำนวนอุปกรณ์ที่เลือก: ${selectedItems.length.toString()}', style: kAppTextStyle,),
+              child: Text('จำนวนอุปกรณ์ที่เลือก: ${cart.items.length.toString()}', style: kAppTextStyle,),
             ),
             Expanded(
               flex: 1,
@@ -75,17 +77,8 @@ class _ItemListState extends State<ItemList> {
                                     if (downloadUrl.hasData) {
                                       return GestureDetector(
                                         onTap: () {
-                                          print('selected ${itemSnapshot.data['fileUrl']} ${selectedItems.length}');
-                                          if (!selectedItems
-                                              .contains(itemSnapshot.data['fileUrl'])) {
-                                            setState(() {
-                                              selectedItems.add(itemSnapshot.data['fileUrl']);
-                                            });
-                                          } else {
-                                            setState(() {
-                                              selectedItems.remove(itemSnapshot.data['fileUrl']);
-                                            });
-                                          }
+                                          print('selected ${itemSnapshot.data['fileUrl']} ${cart.items.length}');
+                                          cart.update(itemSnapshot.data['fileUrl']);
                                         },
                                         child: Container(
                                           margin: EdgeInsets.all(5),
@@ -98,7 +91,7 @@ class _ItemListState extends State<ItemList> {
                                                 width: 180,
                                                 height: 120,
                                               ),
-                                              selectedItems.contains(itemSnapshot.data['fileUrl'])
+                                              cart.items.contains(itemSnapshot.data['fileUrl'])
                                                   ? Icon(
                                                       Icons.check_circle,
                                                       color: Colors.green,
