@@ -22,15 +22,16 @@ class AnswerScreen extends StatelessWidget {
           children: [
             ThemedContainer(
               height: 70,
-              child: Text('เฉลย', style: kAppTitleTextStyle,),
+              child: Text(
+                'เฉลย',
+                style: kAppTitleTextStyle,
+              ),
             ),
             Expanded(
               flex: 1,
               child: StreamBuilder<DocumentSnapshot>(
-                stream: firestore
-                    .collection('scenarios')
-                    .doc(args.id)
-                    .snapshots(),
+                stream:
+                    firestore.collection('scenarios').doc(args.id).snapshots(),
                 builder: (context, scenarioSnapshot) {
                   if (!scenarioSnapshot.hasData) {
                     return Center(
@@ -61,7 +62,7 @@ class AnswerScreen extends StatelessWidget {
                                         margin: EdgeInsets.all(5),
                                         child: Column(
                                           mainAxisAlignment:
-                                          MainAxisAlignment.spaceEvenly,
+                                              MainAxisAlignment.spaceEvenly,
                                           children: [
                                             Image.network(
                                               downloadUrl.data,
@@ -76,25 +77,24 @@ class AnswerScreen extends StatelessWidget {
                                               ),
                                             ),
                                             cart.items.contains(
-                                                itemSnapshot.data.id)
+                                                    itemSnapshot.data.id)
                                                 ? Icon(
-                                              Icons.check_circle,
-                                              color: Colors.green,
-                                              size: 50,
-                                            )
+                                                    Icons.check_circle,
+                                                    color: Colors.green,
+                                                    size: 50,
+                                                  )
                                                 : Icon(
-                                              Icons
-                                                  .check_circle_outline,
-                                              color: Colors.grey,
-                                              size: 50,
-                                            ),
+                                                    Icons.check_circle_outline,
+                                                    color: Colors.grey,
+                                                    size: 50,
+                                                  ),
                                           ],
                                         ),
                                         alignment: Alignment.center,
                                         decoration: BoxDecoration(
                                           color: Colors.brown.shade50,
                                           borderRadius:
-                                          BorderRadius.circular(18.0),
+                                              BorderRadius.circular(18.0),
                                           border: Border.all(
                                               color: Colors.brown, width: 4),
                                         ),
@@ -118,7 +118,11 @@ class AnswerScreen extends StatelessWidget {
             ),
             RaisedButton(
               color: Colors.lightBlueAccent,
-              onPressed: () => Navigator.pop(context),
+              onPressed: () {
+                cart.clear();
+                return Navigator.pushNamed(context, '/playmap',
+                    arguments: args);
+              },
               child: Padding(
                 padding: const EdgeInsets.all(8.0),
                 child: Text(

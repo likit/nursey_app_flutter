@@ -74,11 +74,6 @@ class _ScoreScreenState extends State<ScoreScreen> {
                       child: CircularProgressIndicator(),
                     );
                   } else {
-                    scenarioSnapshot.data['answers'].forEach((var itemId) {
-                      if (cart.items.contains(itemId)) {
-                        score += 1;
-                      }
-                    });
                     return GridView.builder(
                       scrollDirection: Axis.horizontal,
                       gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
@@ -122,11 +117,13 @@ class _ScoreScreenState extends State<ScoreScreen> {
                                                         itemSnapshot.data.id)
                                                 ? Icon(
                                                     Icons.verified,
-                                                    color: Colors.yellow.shade600,
+                                                    color:
+                                                        Colors.yellow.shade600,
                                                     size: 60,
                                                   )
                                                 : Icon(
-                                                    Icons.sentiment_dissatisfied_outlined,
+                                                    Icons
+                                                        .sentiment_dissatisfied_outlined,
                                                     color: Colors.grey,
                                                     size: 40,
                                                   ),
@@ -172,7 +169,10 @@ class _ScoreScreenState extends State<ScoreScreen> {
             ),
             RaisedButton(
               color: Colors.pinkAccent,
-              onPressed: () => Navigator.pop(context),
+              onPressed: () {
+                cart.clear();
+                return Navigator.pushNamed(context, '/scenarios');
+              },
               child: Padding(
                 padding: const EdgeInsets.all(8.0),
                 child: Text(
