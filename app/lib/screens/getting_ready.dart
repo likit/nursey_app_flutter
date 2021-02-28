@@ -78,9 +78,12 @@ class _GetReadyScreenState extends State<GetReadyScreen> {
               children: [
                 RaisedButton(
                     color: Colors.pinkAccent,
-                    child: Text(
-                      'ยกเลิก',
-                      style: kAppTextStyle,
+                    child: Padding(
+                      padding: const EdgeInsets.all(8.0),
+                      child: Text(
+                        'ยกเลิก',
+                        style: kAppTextStyle,
+                      ),
                     ),
                     onPressed: () {
                       _timer.cancel();
@@ -91,9 +94,12 @@ class _GetReadyScreenState extends State<GetReadyScreen> {
                 ),
                 RaisedButton(
                     color: Colors.lightBlue,
-                    child: Text(
-                      'เริ่มทันที',
-                      style: kAppTextStyle,
+                    child: Padding(
+                      padding: const EdgeInsets.all(8.0),
+                      child: Text(
+                        'เริ่มทันที',
+                        style: kAppTextStyle,
+                      ),
                     ),
                     onPressed: () {
                       _timer.cancel();
