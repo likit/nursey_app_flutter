@@ -17,6 +17,13 @@ const TextStyle kAppTitleTextStyle = TextStyle(
   color: Colors.white,
 );
 
+const TextStyle kAppCountdownTextStyle = TextStyle(
+  fontFamily: 'Itim',
+  fontSize: 82.0,
+  fontWeight: FontWeight.bold,
+  color: Colors.blueAccent,
+);
+
 const TextStyle kAppItemTextStyle = TextStyle(
   fontFamily: 'Itim',
   fontSize: 32.0,

@@ -1,6 +1,7 @@
 import 'package:bonfire_test/models/cart.dart';
 import 'package:bonfire_test/screens/answers.dart';
 import 'package:bonfire_test/screens/container_items.dart';
+import 'package:bonfire_test/screens/getting_ready.dart';
 import 'package:bonfire_test/screens/item_list.dart';
 import 'package:bonfire_test/screens/map.dart';
 import 'package:bonfire_test/screens/scenario_list.dart';
@@ -46,6 +47,7 @@ class MyApp extends StatelessWidget {
         '/select-items': (context) => SelectedItems(),
         '/scores': (context) => ScoreScreen(),
         '/answers': (context) => AnswerScreen(),
+        '/get-ready': (context) => GetReadyScreen(),
       },
       theme: ThemeData(
         primarySwatch: Colors.purple,

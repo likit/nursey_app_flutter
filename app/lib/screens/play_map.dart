@@ -44,12 +44,12 @@ class _MainContentState extends State<MainContent> {
               mainAxisAlignment: MainAxisAlignment.center,
               children: [
                 RaisedButton(
-                  color: Colors.lightBlueAccent,
-                  onPressed: () => Navigator.pop(context),
+                  color: Colors.pinkAccent,
+                  onPressed: () => Navigator.pushNamed(context, '/scenarios'),
                   child: Padding(
                     padding: const EdgeInsets.all(8.0),
                     child: Text(
-                      'กลับ',
+                      'ยกเลิก',
                       style: kAppTextStyle,
                     ),
                   ),
@@ -58,7 +58,7 @@ class _MainContentState extends State<MainContent> {
                   width: 5,
                 ),
                 RaisedButton(
-                  color: Colors.grey,
+                  color: Colors.lightBlueAccent,
                   onPressed: () =>
                       Navigator.pushNamed(context, '/select-items'),
                   child: Padding(
@@ -84,7 +84,7 @@ class _MainContentState extends State<MainContent> {
                   child: Padding(
                     padding: const EdgeInsets.all(8.0),
                     child: Text(
-                      'เรียบร้อย',
+                      'ดูคะแนน',
                       style: kAppTextStyle,
                     ),
                   ),

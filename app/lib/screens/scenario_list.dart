@@ -100,7 +100,7 @@ class _ScenarioListState extends State<ScenarioList> {
                 onTap: () {
                   Navigator.pushNamed(
                     context,
-                    '/playmap',
+                    '/get-ready',
                     arguments: ScenarioArguments(doc.id, doc.data()['title'],
                         doc.data()['answers'].length),
                   );
