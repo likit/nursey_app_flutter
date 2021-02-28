@@ -135,7 +135,7 @@ class _ItemListState extends State<ItemList> {
                                   },
                                 );
                               } else {
-                                return Text('Error.');
+                                return Text('Loading..');
                               }
                             });
                       },
