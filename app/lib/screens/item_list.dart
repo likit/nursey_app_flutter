@@ -6,6 +6,7 @@ import 'package:flutter/material.dart';
 import 'package:bonfire_test/widgets/themedContainer.dart';
 import 'package:firebase_storage/firebase_storage.dart' as firebase_storage;
 import 'package:provider/provider.dart';
+import 'package:tuple/tuple.dart';
 
 class ItemList extends StatefulWidget {
   @override
@@ -41,7 +42,10 @@ class _ItemListState extends State<ItemList> {
             ),
             Padding(
               padding: const EdgeInsets.all(10.0),
-              child: Text('จำนวนอุปกรณ์ที่เลือก: ${cart.items.length.toString()}', style: kAppTextStyle,),
+              child: Text(
+                'จำนวนอุปกรณ์ที่เลือก: ${cart.items.length.toString()}',
+                style: kAppTextStyle,
+              ),
             ),
             Expanded(
               flex: 1,
@@ -71,12 +75,14 @@ class _ItemListState extends State<ItemList> {
                             builder: (context, itemSnapshot) {
                               if (itemSnapshot.hasData) {
                                 return FutureBuilder(
-                                  future: storage.ref(itemSnapshot.data['fileUrl']).getDownloadURL(),
+                                  future: storage
+                                      .ref(itemSnapshot.data['fileUrl'])
+                                      .getDownloadURL(),
                                   builder: (context, downloadUrl) {
                                     if (downloadUrl.hasData) {
                                       return GestureDetector(
                                         onTap: () {
-                                          cart.update(itemSnapshot.data['fileUrl']);
+                                          cart.update(itemSnapshot.data.id);
                                         },
                                         child: Container(
                                           margin: EdgeInsets.all(5),
@@ -96,7 +102,8 @@ class _ItemListState extends State<ItemList> {
                                                   style: kAppTextStyle,
                                                 ),
                                               ),
-                                              cart.items.contains(itemSnapshot.data['fileUrl'])
+                                              cart.items.contains(
+                                                      itemSnapshot.data.id)
                                                   ? Icon(
                                                       Icons.check_circle,
                                                       color: Colors.green,
@@ -113,10 +120,10 @@ class _ItemListState extends State<ItemList> {
                                           alignment: Alignment.center,
                                           decoration: BoxDecoration(
                                             color: Colors.brown.shade50,
-                                            borderRadius: BorderRadius.circular(18.0),
+                                            borderRadius:
+                                                BorderRadius.circular(18.0),
                                             border: Border.all(
-                                                color: Colors.brown,
-                                                width: 4),
+                                                color: Colors.brown, width: 4),
                                           ),
                                         ),
                                       );

@@ -49,55 +49,75 @@ class _SelectedItemsState extends State<SelectedItems> {
                       shrinkWrap: true,
                       itemCount: cart.items.length,
                       itemBuilder: (context, index) {
-                        return FutureBuilder(
-                          future:
-                              storage.ref(cart.items[index]).getDownloadURL(),
-                          builder: (context, downloadUrl) {
-                            if (downloadUrl.hasData) {
-                              return Container(
-                                margin: EdgeInsets.all(5),
-                                child: Column(
-                                  mainAxisAlignment:
-                                      MainAxisAlignment.spaceEvenly,
-                                  children: [
-                                    Image.network(
-                                      downloadUrl.data,
-                                      width: 180,
-                                      height: 120,
-                                    ),
-                                    GestureDetector(
-                                      onTap: () {
-                                        cart.update(cart.items[index]);
-                                      },
-                                      child: Row(
-                                        mainAxisAlignment:
-                                            MainAxisAlignment.center,
-                                        children: [
-                                          Icon(
-                                            Icons.reply,
-                                            color: Colors.red,
-                                            size: 50,
-                                          ),
-                                        ],
-                                      ),
-                                    ),
-                                  ],
-                                ),
-                                alignment: Alignment.center,
-                                decoration: BoxDecoration(
-                                  color: Colors.brown.shade50,
-                                  borderRadius: BorderRadius.circular(18.0),
-                                  border:
-                                      Border.all(color: Colors.brown, width: 4),
-                                ),
-                              );
-                            } else {
-                              return Center(
-                                child: CircularProgressIndicator(),
-                              );
-                            }
-                          },
-                        );
+                        return StreamBuilder(
+                            stream: firestore
+                                .collection('images')
+                                .doc(cart.items[index])
+                                .snapshots(),
+                            builder: (context, snapshot) {
+                              if (snapshot.hasData) {
+                                return FutureBuilder(
+                                  future: storage
+                                      .ref(snapshot.data['fileUrl'])
+                                      .getDownloadURL(),
+                                  builder: (context, downloadUrl) {
+                                    if (downloadUrl.hasData) {
+                                      return Container(
+                                        margin: EdgeInsets.all(5),
+                                        child: Column(
+                                          mainAxisAlignment:
+                                              MainAxisAlignment.spaceEvenly,
+                                          children: [
+                                            Image.network(
+                                              downloadUrl.data,
+                                              width: 180,
+                                              height: 120,
+                                            ),
+                                            Padding(
+                                              padding: EdgeInsets.all(8.0),
+                                              child: Text(
+                                                snapshot.data['name'],
+                                                style: kAppTextStyle,
+                                              ),
+                                            ),
+                                            GestureDetector(
+                                              onTap: () {
+                                                cart.update(cart.items[index]);
+                                              },
+                                              child: Row(
+                                                mainAxisAlignment:
+                                                    MainAxisAlignment.center,
+                                                children: [
+                                                  Icon(
+                                                    Icons.reply,
+                                                    color: Colors.red,
+                                                    size: 50,
+                                                  ),
+                                                ],
+                                              ),
+                                            ),
+                                          ],
+                                        ),
+                                        alignment: Alignment.center,
+                                        decoration: BoxDecoration(
+                                          color: Colors.brown.shade50,
+                                          borderRadius:
+                                              BorderRadius.circular(18.0),
+                                          border: Border.all(
+                                              color: Colors.brown, width: 4),
+                                        ),
+                                      );
+                                    } else {
+                                      return Center(
+                                        child: CircularProgressIndicator(),
+                                      );
+                                    }
+                                  },
+                                );
+                              } else {
+                                return Text('No image found.');
+                              }
+                            });
                       },
                     ),
                   ),
