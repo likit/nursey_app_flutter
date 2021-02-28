@@ -39,9 +39,9 @@ class AnswerScreen extends StatelessWidget {
                     );
                   } else {
                     return GridView.builder(
-                      scrollDirection: Axis.horizontal,
+                      scrollDirection: Axis.vertical,
                       gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
-                          crossAxisCount: 2),
+                          crossAxisCount: 1),
                       shrinkWrap: true,
                       itemCount: scenarioSnapshot.data['answers'].length,
                       itemBuilder: (context, index) {
@@ -59,7 +59,7 @@ class AnswerScreen extends StatelessWidget {
                                   builder: (context, downloadUrl) {
                                     if (downloadUrl.hasData) {
                                       return Container(
-                                        margin: EdgeInsets.all(5),
+                                        margin: EdgeInsets.symmetric(vertical: 5, horizontal: 30),
                                         child: Column(
                                           mainAxisAlignment:
                                               MainAxisAlignment.spaceEvenly,
@@ -69,24 +69,21 @@ class AnswerScreen extends StatelessWidget {
                                               width: 180,
                                               height: 120,
                                             ),
-                                            Padding(
-                                              padding: EdgeInsets.all(8.0),
-                                              child: Text(
-                                                itemSnapshot.data['name'],
-                                                style: kAppTextStyle,
-                                              ),
+                                            Text(
+                                              itemSnapshot.data['name'],
+                                              style: kAppTextStyle,
                                             ),
                                             cart.items.contains(
                                                     itemSnapshot.data.id)
                                                 ? Icon(
                                                     Icons.check_circle,
                                                     color: Colors.green,
-                                                    size: 50,
+                                                    size: 60,
                                                   )
                                                 : Icon(
                                                     Icons.check_circle_outline,
                                                     color: Colors.grey,
-                                                    size: 50,
+                                                    size: 60,
                                                   ),
                                           ],
                                         ),
@@ -120,7 +117,7 @@ class AnswerScreen extends StatelessWidget {
               color: Colors.lightBlueAccent,
               onPressed: () {
                 cart.clear();
-                return Navigator.pushNamed(context, '/playmap',
+                return Navigator.pushNamed(context, '/get-ready',
                     arguments: args);
               },
               child: Padding(

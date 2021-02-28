@@ -6,6 +6,17 @@ const TextStyle kAppTextStyle = TextStyle(
   fontSize: 20.0,
 );
 
+const TextStyle kAppCountdownSmallTextStyle = TextStyle(
+  fontFamily: 'Itim',
+  fontSize: 24.0,
+);
+
+const TextStyle kAppCountdownSmallDangerTextStyle = TextStyle(
+  fontFamily: 'Itim',
+  fontSize: 24.0,
+  color: Colors.red,
+);
+
 const TextStyle kAppSubTextStyle = TextStyle(
   fontFamily: 'Itim',
   fontSize: 16.0,

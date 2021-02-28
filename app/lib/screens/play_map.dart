@@ -1,14 +1,17 @@
+import 'dart:async';
+
 import 'package:bonfire_test/constants.dart';
 import 'package:bonfire_test/models/cart.dart';
+import 'package:bonfire_test/models/timer.dart';
 import 'package:bonfire_test/screens/scenario_list.dart';
 import 'package:bonfire_test/widgets/themedContainer.dart';
-import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:bonfire_test/item_container.dart';
 import 'package:flutter/gestures.dart';
 import 'package:tuple/tuple.dart';
 import 'package:provider/provider.dart';
 
+Timer timer;
 //TODO: remove duplicate code.
 
 class PlayMapScreen extends StatelessWidget {
@@ -31,6 +34,28 @@ class MainContent extends StatefulWidget {
 }
 
 class _MainContentState extends State<MainContent> {
+  int seconds = 0;
+  @override
+  void initState() {
+    // TODO: implement initState
+    super.initState();
+    Future.delayed(Duration.zero, () {
+      final ScenarioArguments args = ModalRoute.of(context).settings.arguments;
+      timer = Timer.periodic(Duration(seconds: 1), (_timer) {
+        int currTime = Provider.of<TimerModel>(context, listen: false).seconds;
+        if (currTime == 0) {
+          _timer.cancel();
+          Navigator.pushNamed(context, '/scores', arguments: args);
+        } else {
+          setState(() {
+            seconds = currTime;
+          });
+          Provider.of<TimerModel>(context, listen: false).seconds--;
+        }
+      });
+    });
+  }
+
   @override
   Widget build(BuildContext context) {
     final ScenarioArguments args = ModalRoute.of(context).settings.arguments;
@@ -39,13 +64,22 @@ class _MainContentState extends State<MainContent> {
         child: Column(
           mainAxisAlignment: MainAxisAlignment.center,
           children: [
+            Text(
+              'เวลา: ${seconds} วินาที',
+              style: seconds > 5
+                  ? kAppCountdownSmallTextStyle
+                  : kAppCountdownSmallDangerTextStyle,
+            ),
             RoomMap(),
             Row(
               mainAxisAlignment: MainAxisAlignment.center,
               children: [
                 RaisedButton(
                   color: Colors.pinkAccent,
-                  onPressed: () => Navigator.pushNamed(context, '/scenarios'),
+                  onPressed: () {
+                    timer.cancel();
+                    return Navigator.pushNamed(context, '/scenarios');
+                  },
                   child: Padding(
                     padding: const EdgeInsets.all(8.0),
                     child: Text(
@@ -59,8 +93,9 @@ class _MainContentState extends State<MainContent> {
                 ),
                 RaisedButton(
                   color: Colors.lightBlueAccent,
-                  onPressed: () =>
-                      Navigator.pushNamed(context, '/select-items'),
+                  onPressed: () {
+                    Navigator.pushNamed(context, '/select-items');
+                  },
                   child: Padding(
                     padding: const EdgeInsets.all(8.0),
                     child: Text(
@@ -75,10 +110,11 @@ class _MainContentState extends State<MainContent> {
                 RaisedButton(
                   color: Colors.green,
                   onPressed: () {
+                    timer.cancel();
                     return Navigator.pushNamed(
                       context,
                       '/scores',
-                      arguments: ScenarioArguments(args.id, args.title, args.numItems),
+                      arguments: args,
                     );
                   },
                   child: Padding(

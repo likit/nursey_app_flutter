@@ -1,5 +1,6 @@
 import 'package:bonfire_test/constants.dart';
 import 'package:bonfire_test/models/cart.dart';
+import 'package:bonfire_test/models/timer.dart';
 import 'package:bonfire_test/screens/scenario_list.dart';
 import 'package:bonfire_test/widgets/themedContainer.dart';
 import 'package:flutter/material.dart';
@@ -47,10 +48,12 @@ class _ScoreScreenState extends State<ScoreScreen> {
 
   @override
   Widget build(BuildContext context) {
+    final ScenarioArguments args = ModalRoute.of(context).settings.arguments;
     var cart = context.watch<CartModel>();
+    int seconds = Provider.of<TimerModel>(context, listen: false).seconds;
+    int usedTime = (args.numItems * 15) - seconds;
     firebase_storage.FirebaseStorage storage =
         firebase_storage.FirebaseStorage.instance;
-    final ScenarioArguments args = ModalRoute.of(context).settings.arguments;
 
     return Scaffold(
       body: SafeArea(
@@ -62,6 +65,9 @@ class _ScoreScreenState extends State<ScoreScreen> {
                 'คะแนน ${score}',
                 style: kAppTitleTextStyle,
               ),
+            ),
+            Center(
+              child: Text('ใช้เวลาไป ${usedTime} วินาที', style: kAppTextStyle,),
             ),
             Expanded(
               flex: 1,
@@ -75,9 +81,9 @@ class _ScoreScreenState extends State<ScoreScreen> {
                     );
                   } else {
                     return GridView.builder(
-                      scrollDirection: Axis.horizontal,
+                      scrollDirection: Axis.vertical,
                       gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
-                          crossAxisCount: 2),
+                          crossAxisCount: 1),
                       shrinkWrap: true,
                       itemCount: cart.items.length,
                       itemBuilder: (context, index) {
@@ -95,7 +101,7 @@ class _ScoreScreenState extends State<ScoreScreen> {
                                   builder: (context, downloadUrl) {
                                     if (downloadUrl.hasData) {
                                       return Container(
-                                        margin: EdgeInsets.all(5),
+                                        margin: EdgeInsets.symmetric(horizontal: 30, vertical: 5),
                                         child: Column(
                                           mainAxisAlignment:
                                               MainAxisAlignment.spaceEvenly,
@@ -105,12 +111,9 @@ class _ScoreScreenState extends State<ScoreScreen> {
                                               width: 180,
                                               height: 120,
                                             ),
-                                            Padding(
-                                              padding: EdgeInsets.all(8.0),
-                                              child: Text(
-                                                itemSnapshot.data['name'],
-                                                style: kAppTextStyle,
-                                              ),
+                                            Text(
+                                              itemSnapshot.data['name'],
+                                              style: kAppTextStyle,
                                             ),
                                             scenarioSnapshot.data['answers']
                                                     .contains(
@@ -125,7 +128,7 @@ class _ScoreScreenState extends State<ScoreScreen> {
                                                     Icons
                                                         .sentiment_dissatisfied_outlined,
                                                     color: Colors.grey,
-                                                    size: 40,
+                                                    size: 60,
                                                   ),
                                           ],
                                         ),
@@ -155,31 +158,39 @@ class _ScoreScreenState extends State<ScoreScreen> {
                 },
               ),
             ),
-            RaisedButton(
-              color: Colors.lightBlueAccent,
-              onPressed: () =>
-                  Navigator.pushNamed(context, '/answers', arguments: args),
-              child: Padding(
-                padding: const EdgeInsets.all(8.0),
-                child: Text(
-                  'ดูเฉลย',
-                  style: kAppTextStyle,
+            Row(
+              mainAxisAlignment: MainAxisAlignment.center,
+              children: [
+                RaisedButton(
+                  color: Colors.lightBlueAccent,
+                  onPressed: () =>
+                      Navigator.pushNamed(context, '/answers', arguments: args),
+                  child: Padding(
+                    padding: const EdgeInsets.all(8.0),
+                    child: Text(
+                      'ดูเฉลย',
+                      style: kAppTextStyle,
+                    ),
+                  ),
                 ),
-              ),
-            ),
-            RaisedButton(
-              color: Colors.pinkAccent,
-              onPressed: () {
-                cart.clear();
-                return Navigator.pushNamed(context, '/scenarios');
-              },
-              child: Padding(
-                padding: const EdgeInsets.all(8.0),
-                child: Text(
-                  'ไปหน้ารายการ',
-                  style: kAppTextStyle,
+                SizedBox(
+                  width: 10,
                 ),
-              ),
+                RaisedButton(
+                  color: Colors.pinkAccent,
+                  onPressed: () {
+                    cart.clear();
+                    return Navigator.pushNamed(context, '/scenarios');
+                  },
+                  child: Padding(
+                    padding: const EdgeInsets.all(8.0),
+                    child: Text(
+                      'ออก',
+                      style: kAppTextStyle,
+                    ),
+                  ),
+                ),
+              ],
             ),
           ],
         ),

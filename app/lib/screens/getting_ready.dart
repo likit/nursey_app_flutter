@@ -1,9 +1,10 @@
 import 'dart:async';
+import 'package:bonfire_test/models/timer.dart';
 import 'package:bonfire_test/widgets/themedContainer.dart';
-import 'package:quiver/async.dart';
 import 'package:bonfire_test/constants.dart';
 import 'package:bonfire_test/screens/scenario_list.dart';
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
 
 class GetReadyScreen extends StatefulWidget {
   @override
@@ -12,6 +13,8 @@ class GetReadyScreen extends StatefulWidget {
 
 class _GetReadyScreenState extends State<GetReadyScreen> {
   int delay = 5;
+  int totalSeconds = 0;
+  Timer _timer;
 
   @override
   void initState() {
@@ -19,7 +22,7 @@ class _GetReadyScreenState extends State<GetReadyScreen> {
     super.initState();
     Future.delayed(Duration.zero, () {
       final ScenarioArguments args = ModalRoute.of(context).settings.arguments;
-      Timer.periodic(Duration(seconds: 1), (timer) {
+      _timer = Timer.periodic(Duration(seconds: 1), (timer) {
         setState(() {
           delay--;
         });
@@ -34,6 +37,9 @@ class _GetReadyScreenState extends State<GetReadyScreen> {
   @override
   Widget build(BuildContext context) {
     final ScenarioArguments args = ModalRoute.of(context).settings.arguments;
+    var timer = context.watch<TimerModel>();
+    timer.seconds = 15 * args.numItems;
+    totalSeconds = timer.seconds;
     return Scaffold(
       body: SafeArea(
         child: Column(
@@ -50,6 +56,13 @@ class _GetReadyScreenState extends State<GetReadyScreen> {
               child: Column(
                 children: [
                   Text(
+                    'เวลาทั้งหมด ${totalSeconds} วินาที',
+                    style: kAppItemTextStyle,
+                  ),
+                  SizedBox(
+                    height: 10,
+                  ),
+                  Text(
                     'Getting ready..',
                     style: kAppItemTextStyle,
                   ),
@@ -60,13 +73,34 @@ class _GetReadyScreenState extends State<GetReadyScreen> {
                 ],
               ),
             ),
-            RaisedButton(
-              color: Colors.pinkAccent,
-              child: Text(
-                'ยกเลิก',
-                style: kAppTextStyle,
-              ),
-              onPressed: () => Navigator.pop(context),
+            Row(
+              mainAxisAlignment: MainAxisAlignment.center,
+              children: [
+                RaisedButton(
+                    color: Colors.pinkAccent,
+                    child: Text(
+                      'ยกเลิก',
+                      style: kAppTextStyle,
+                    ),
+                    onPressed: () {
+                      _timer.cancel();
+                      return Navigator.pushNamed(context, '/scenarios');
+                    }),
+                SizedBox(
+                  width: 10,
+                ),
+                RaisedButton(
+                    color: Colors.lightBlue,
+                    child: Text(
+                      'เริ่มทันที',
+                      style: kAppTextStyle,
+                    ),
+                    onPressed: () {
+                      _timer.cancel();
+                      return Navigator.pushNamed(context, '/playmap',
+                          arguments: args);
+                    }),
+              ],
             ),
           ],
         ),
