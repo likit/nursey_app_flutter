@@ -1,21 +1,22 @@
 import 'package:flutter/foundation.dart';
+import 'package:tuple/tuple.dart';
 
 class CartModel extends ChangeNotifier {
-  final List<String> _itemFileUrls = [];
+  final List<String> _items = [];
 
-  List<String> get items => _itemFileUrls;
+  List<String> get items => _items;
 
-  void update(String fileUrl) {
-    if (_itemFileUrls.contains(fileUrl)) {
-      _itemFileUrls.remove(fileUrl);
+  void update(String itemId) {
+    if (_items.contains(itemId)) {
+      _items.remove(itemId);
     } else {
-      _itemFileUrls.add(fileUrl);
+      _items.add(itemId);
     }
     notifyListeners();
   }
 
   void clear() {
-    _itemFileUrls.clear();
+    _items.clear();
     notifyListeners();
   }
 }
