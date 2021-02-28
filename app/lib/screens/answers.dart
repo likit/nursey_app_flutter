@@ -113,31 +113,39 @@ class AnswerScreen extends StatelessWidget {
                 },
               ),
             ),
-            RaisedButton(
-              color: Colors.lightBlueAccent,
-              onPressed: () {
-                cart.clear();
-                return Navigator.pushNamed(context, '/get-ready',
-                    arguments: args);
-              },
-              child: Padding(
-                padding: const EdgeInsets.all(8.0),
-                child: Text(
-                  'เล่นใหม่',
-                  style: kAppTextStyle,
+            Row(
+              mainAxisAlignment: MainAxisAlignment.center,
+              children: [
+                RaisedButton(
+                  color: Colors.lightBlueAccent,
+                  onPressed: () {
+                    cart.clear();
+                    return Navigator.pushNamed(context, '/get-ready',
+                        arguments: args);
+                  },
+                  child: Padding(
+                    padding: const EdgeInsets.all(8.0),
+                    child: Text(
+                      'เล่นใหม่',
+                      style: kAppTextStyle,
+                    ),
+                  ),
                 ),
-              ),
-            ),
-            RaisedButton(
-              color: Colors.pinkAccent,
-              onPressed: () => Navigator.pop(context),
-              child: Padding(
-                padding: const EdgeInsets.all(8.0),
-                child: Text(
-                  'กลับ',
-                  style: kAppTextStyle,
+                SizedBox(
+                  width: 10,
                 ),
-              ),
+                RaisedButton(
+                  color: Colors.pinkAccent,
+                  onPressed: () => Navigator.pop(context),
+                  child: Padding(
+                    padding: const EdgeInsets.all(8.0),
+                    child: Text(
+                      'กลับ',
+                      style: kAppTextStyle,
+                    ),
+                  ),
+                ),
+              ],
             ),
           ],
         ),
