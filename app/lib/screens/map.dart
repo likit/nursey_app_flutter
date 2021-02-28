@@ -3,13 +3,15 @@ import 'package:flutter/material.dart';
 import 'package:bonfire_test/item_container.dart';
 import 'package:flutter/gestures.dart';
 import 'package:tuple/tuple.dart';
+import 'play_map.dart' show ListItemArguments;
 
-String sceneId = '';
+String containerId = '';
+String containerName = '';
 
-class ScenarioArguments {
-  final String id;
-
-  ScenarioArguments(this.id);
+class ContainerArguments {
+  final String containerId;
+  final String containerName;
+  ContainerArguments({this.containerId, this.containerName});
 }
 
 class MapScreen extends StatelessWidget {
@@ -59,11 +61,16 @@ class _MainContentState extends State<MainContent> {
                 ),
                 RaisedButton(
                   color: Colors.pinkAccent,
-                  onPressed: () => Navigator.pushNamed(
-                    context,
-                    '/container-item',
-                    arguments: ScenarioArguments(sceneId),
-                  ),
+                  onPressed: () {
+                    if (containerId != '') {
+                      return Navigator.pushNamed(
+                        context,
+                        '/container-item',
+                        arguments: ContainerArguments(
+                            containerId: containerId, containerName: containerName),
+                      );
+                    }
+                  },
                   child: Padding(
                     padding: const EdgeInsets.all(8.0),
                     child: Text(
@@ -141,7 +148,8 @@ class _RoomMapState extends State<RoomMap> {
             setState(() {
               Tuple2 _container = checkItem(local);
               this.itemLabel = _container.item1;
-              sceneId = _container.item2;
+              containerName = _container.item1;
+              containerId = _container.item2;
               this.startDXPoint = '${local.dx.floorToDouble()}';
               this.startDYPoint = '${local.dy.floorToDouble()}';
             });
