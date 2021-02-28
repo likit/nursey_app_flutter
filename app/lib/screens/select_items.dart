@@ -27,7 +27,7 @@ class _SelectedItemsState extends State<SelectedItems> {
               height: 70,
               child: Text(
                 'รายการที่เลือก',
-                style: kAppTextStyle,
+                style: kAppTitleTextStyle,
               ),
             ),
             cart.items.length == 0
@@ -89,7 +89,7 @@ class _SelectedItemsState extends State<SelectedItems> {
                                                     MainAxisAlignment.center,
                                                 children: [
                                                   Icon(
-                                                    Icons.reply,
+                                                    Icons.cancel,
                                                     color: Colors.red,
                                                     size: 50,
                                                   ),

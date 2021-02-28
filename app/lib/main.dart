@@ -1,9 +1,11 @@
 import 'package:bonfire_test/models/cart.dart';
+import 'package:bonfire_test/screens/answers.dart';
 import 'package:bonfire_test/screens/container_items.dart';
 import 'package:bonfire_test/screens/item_list.dart';
 import 'package:bonfire_test/screens/map.dart';
 import 'package:bonfire_test/screens/scenario_list.dart';
 import 'package:bonfire_test/screens/lesson_list.dart';
+import 'package:bonfire_test/screens/scores.dart';
 import 'package:bonfire_test/screens/select_items.dart';
 import 'package:provider/provider.dart';
 import 'screens/play_map.dart';
@@ -42,6 +44,8 @@ class MyApp extends StatelessWidget {
         '/container-item': (context) => ContainerItem(),
         '/item-list': (context) => ItemList(),
         '/select-items': (context) => SelectedItems(),
+        '/scores': (context) => ScoreScreen(),
+        '/answers': (context) => AnswerScreen(),
       },
       theme: ThemeData(
         primarySwatch: Colors.purple,

@@ -33,7 +33,7 @@ class MainContent extends StatefulWidget {
 class _MainContentState extends State<MainContent> {
   @override
   Widget build(BuildContext context) {
-    var cart = context.watch<CartModel>();
+    final ScenarioArguments args = ModalRoute.of(context).settings.arguments;
     return Container(
       child: Center(
         child: Column(
@@ -59,7 +59,8 @@ class _MainContentState extends State<MainContent> {
                 ),
                 RaisedButton(
                   color: Colors.grey,
-                  onPressed: () => Navigator.pushNamed(context, '/select-items'),
+                  onPressed: () =>
+                      Navigator.pushNamed(context, '/select-items'),
                   child: Padding(
                     padding: const EdgeInsets.all(8.0),
                     child: Text(
@@ -74,7 +75,11 @@ class _MainContentState extends State<MainContent> {
                 RaisedButton(
                   color: Colors.green,
                   onPressed: () {
-                    cart.clear();
+                    return Navigator.pushNamed(
+                      context,
+                      '/scores',
+                      arguments: ScenarioArguments(args.id, args.title, args.numItems),
+                    );
                   },
                   child: Padding(
                     padding: const EdgeInsets.all(8.0),
@@ -135,7 +140,9 @@ class _RoomMapState extends State<RoomMap> {
                   context,
                   '/item-list',
                   arguments: ListItemArguments(
-                      sceneId: args.id, containerId: containerId, containerName: itemLabel),
+                      sceneId: args.id,
+                      containerId: containerId,
+                      containerName: itemLabel),
                 );
               }
             });
@@ -150,7 +157,10 @@ class _RoomMapState extends State<RoomMap> {
           padding: const EdgeInsets.all(12.0),
           child: Column(
             children: [
-              Text('จำนวนอุปกรณ์ในตะกร้าคือ ${cart.items.length}/${args.numItems} ชิ้น', style: kAppTextStyle,),
+              Text(
+                'จำนวนอุปกรณ์ในตะกร้าคือ ${cart.items.length}/${args.numItems} ชิ้น',
+                style: kAppTextStyle,
+              ),
             ],
           ),
         ),
