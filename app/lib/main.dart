@@ -4,6 +4,7 @@ import 'package:bonfire_test/screens/item_list.dart';
 import 'package:bonfire_test/screens/map.dart';
 import 'package:bonfire_test/screens/scenario_list.dart';
 import 'package:bonfire_test/screens/lesson_list.dart';
+import 'package:bonfire_test/screens/select_items.dart';
 import 'package:provider/provider.dart';
 import 'screens/play_map.dart';
 import 'package:flutter/material.dart';
@@ -40,6 +41,7 @@ class MyApp extends StatelessWidget {
         '/playmap': (context) => PlayMapScreen(),
         '/container-item': (context) => ContainerItem(),
         '/item-list': (context) => ItemList(),
+        '/select-items': (context) => SelectedItems(),
       },
       theme: ThemeData(
         primarySwatch: Colors.purple,

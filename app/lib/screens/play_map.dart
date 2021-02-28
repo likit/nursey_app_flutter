@@ -55,17 +55,31 @@ class _MainContentState extends State<MainContent> {
                   ),
                 ),
                 SizedBox(
-                  width: 10,
+                  width: 5,
                 ),
                 RaisedButton(
-                  color: Colors.red,
+                  color: Colors.grey,
+                  onPressed: () => Navigator.pushNamed(context, '/select-items'),
+                  child: Padding(
+                    padding: const EdgeInsets.all(8.0),
+                    child: Text(
+                      'ดูตะกร้า',
+                      style: kAppTextStyle,
+                    ),
+                  ),
+                ),
+                SizedBox(
+                  width: 5,
+                ),
+                RaisedButton(
+                  color: Colors.green,
                   onPressed: () {
                     cart.clear();
                   },
                   child: Padding(
                     padding: const EdgeInsets.all(8.0),
                     child: Text(
-                      'ลบตะกร้า',
+                      'เรียบร้อย',
                       style: kAppTextStyle,
                     ),
                   ),
