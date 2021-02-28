@@ -70,14 +70,12 @@ class _ItemListState extends State<ItemList> {
                                 .snapshots(),
                             builder: (context, itemSnapshot) {
                               if (itemSnapshot.hasData) {
-                                print('---${itemSnapshot.data['fileUrl']}');
                                 return FutureBuilder(
                                   future: storage.ref(itemSnapshot.data['fileUrl']).getDownloadURL(),
                                   builder: (context, downloadUrl) {
                                     if (downloadUrl.hasData) {
                                       return GestureDetector(
                                         onTap: () {
-                                          print('selected ${itemSnapshot.data['fileUrl']} ${cart.items.length}');
                                           cart.update(itemSnapshot.data['fileUrl']);
                                         },
                                         child: Container(
@@ -90,6 +88,13 @@ class _ItemListState extends State<ItemList> {
                                                 downloadUrl.data,
                                                 width: 180,
                                                 height: 120,
+                                              ),
+                                              Padding(
+                                                padding: EdgeInsets.all(8.0),
+                                                child: Text(
+                                                  itemSnapshot.data['name'],
+                                                  style: kAppTextStyle,
+                                                ),
                                               ),
                                               cart.items.contains(itemSnapshot.data['fileUrl'])
                                                   ? Icon(
@@ -117,10 +122,7 @@ class _ItemListState extends State<ItemList> {
                                       );
                                     } else {
                                       return Center(
-                                        child: Text(
-                                          'Loading..',
-                                          style: kAppTextStyle,
-                                        ),
+                                        child: CircularProgressIndicator(),
                                       );
                                     }
                                   },
