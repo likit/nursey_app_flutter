@@ -1,5 +1,4 @@
 import 'package:flutter/foundation.dart';
-import 'package:tuple/tuple.dart';
 
 class CartModel extends ChangeNotifier {
   final List<String> _items = [];
