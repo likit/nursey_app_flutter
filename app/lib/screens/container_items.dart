@@ -44,6 +44,16 @@ class ContainerItem extends StatelessWidget {
                       child: CircularProgressIndicator(),
                     );
                   } else {
+                    var sortedImages = [];
+                    Future<List> fetchImageData() async {
+                      await containerSnapshot.data['images'].forEach((image)=>{
+                        firestore.collection('images').doc(image).get().then((snapshot)=>{
+                          sortedImages.add(snapshot)
+                        })
+                      });
+                      sortedImages.sort((a, b)=> a.data['group'].compareTo(b.data['group']));
+                      return sortedImages;
+                    }
                     return GridView.builder(
                       scrollDirection: Axis.horizontal,
                       gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
@@ -51,16 +61,13 @@ class ContainerItem extends StatelessWidget {
                       shrinkWrap: true,
                       itemCount: containerSnapshot.data['images'].length,
                       itemBuilder: (context, index) {
-                        return StreamBuilder(
-                            stream: firestore
-                                .collection('images')
-                                .doc(containerSnapshot.data['images'][index])
-                                .snapshots(),
+                        return FutureBuilder(
+                            future: fetchImageData(),
                             builder: (context, itemSnapshot) {
                               if (itemSnapshot.hasData) {
                                 return FutureBuilder(
                                   future: storage
-                                      .ref(itemSnapshot.data['fileUrl'])
+                                      .ref(itemSnapshot.data["fileUrl"])
                                       .getDownloadURL(),
                                   builder: (context, downloadUrl) {
                                     if (downloadUrl.hasData) {
@@ -81,6 +88,10 @@ class ContainerItem extends StatelessWidget {
                                                 itemSnapshot.data['name'],
                                                 style: kAppTextStyle,
                                               ),
+                                            ),
+                                            Text(
+                                              itemSnapshot.data['group'],
+                                              style: kAppTextStyle,
                                             )
                                           ],
                                         ),
