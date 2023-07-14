@@ -31,7 +31,7 @@ class _ScoreScreenState extends State<ScoreScreen> {
           .then((DocumentSnapshot snapshot) {
         if (snapshot.exists) {
           items.forEach((var itemId) {
-            if (snapshot.data()['answers'].contains(itemId)) {
+            if ((snapshot.data() as Map)['answers'].contains(itemId)) {
               setState(() {
                 score += 1;
               });
@@ -67,7 +67,10 @@ class _ScoreScreenState extends State<ScoreScreen> {
               ),
             ),
             Center(
-              child: Text('ใช้เวลาไป ${usedTime} วินาที', style: kAppTextStyle,),
+              child: Text(
+                'ใช้เวลาไป ${usedTime} วินาที',
+                style: kAppTextStyle,
+              ),
             ),
             Expanded(
               flex: 1,
@@ -101,7 +104,8 @@ class _ScoreScreenState extends State<ScoreScreen> {
                                   builder: (context, downloadUrl) {
                                     if (downloadUrl.hasData) {
                                       return Container(
-                                        margin: EdgeInsets.symmetric(horizontal: 30, vertical: 5),
+                                        margin: EdgeInsets.symmetric(
+                                            horizontal: 30, vertical: 5),
                                         child: Column(
                                           mainAxisAlignment:
                                               MainAxisAlignment.spaceEvenly,

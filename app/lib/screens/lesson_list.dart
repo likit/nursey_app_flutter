@@ -62,15 +62,15 @@ class _LessonListState extends State<LessonList> {
                 child: Card(
                   child: ListTile(
                     leading: Icon(Icons.book),
-                    trailing: doc.data()['isPracticeMode'] == 'no'
+                    trailing: (doc.data() as Map)['isPracticeMode'] == 'no'
                         ? Icon(Icons.lock_clock)
                         : null,
                     title: Text(
-                      doc.data()['name'],
+                      (doc.data() as Map)['name'],
                       style: kAppTextStyle,
                     ),
                     subtitle: Text(
-                      doc.data()['objective'],
+                      (doc.data() as Map)['objective'],
                       style: kAppSubTextStyle,
                     ),
                     isThreeLine: true,

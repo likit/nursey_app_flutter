@@ -101,15 +101,17 @@ class _ScenarioListState extends State<ScenarioList> {
                   Navigator.pushNamed(
                     context,
                     '/get-ready',
-                    arguments: ScenarioArguments(doc.id, doc.data()['title'],
-                        doc.data()['answers'].length),
+                    arguments: ScenarioArguments(
+                        doc.id,
+                        (doc.data() as Map)['title'],
+                        (doc.data() as Map)['answers'].length),
                   );
                 },
                 child: Card(
                   child: ListTile(
                     leading: Icon(Icons.play_arrow),
                     title: Text(
-                      doc.data()['title'],
+                      (doc.data() as Map)['title'],
                       style: kAppTextStyle,
                     ),
                   ),
