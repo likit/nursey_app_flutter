@@ -51,7 +51,8 @@ class _ScoreScreenState extends State<ScoreScreen> {
     final ScenarioArguments args = ModalRoute.of(context).settings.arguments;
     var cart = context.watch<CartModel>();
     int seconds = Provider.of<TimerModel>(context, listen: false).seconds;
-    int usedTime = (args.numItems * 15) - seconds;
+    // int usedTime = (args.numItems * 15) - seconds;
+    int usedTime = seconds;
     firebase_storage.FirebaseStorage storage =
         firebase_storage.FirebaseStorage.instance;
 

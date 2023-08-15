@@ -43,7 +43,11 @@ class _MainContentState extends State<MainContent> {
       final ScenarioArguments args = ModalRoute.of(context).settings.arguments;
       timer = Timer.periodic(Duration(seconds: 1), (_timer) {
         int currTime = Provider.of<TimerModel>(context, listen: false).seconds;
-        if (currTime == 0) {
+        setState(() {
+          seconds = currTime;
+        });
+        Provider.of<TimerModel>(context, listen: false).seconds++;
+/*         if (currTime == 0) {
           _timer.cancel();
           Navigator.pushNamed(context, '/scores', arguments: args);
         } else {
@@ -51,7 +55,7 @@ class _MainContentState extends State<MainContent> {
             seconds = currTime;
           });
           Provider.of<TimerModel>(context, listen: false).seconds--;
-        }
+        } */
       });
     });
   }
@@ -66,7 +70,7 @@ class _MainContentState extends State<MainContent> {
           children: [
             Text(
               'เวลา: ${seconds} วินาที',
-              style: seconds > 5
+              style: seconds < 120
                   ? kAppCountdownSmallTextStyle
                   : kAppCountdownSmallDangerTextStyle,
             ),

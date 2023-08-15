@@ -38,7 +38,8 @@ class _GetReadyScreenState extends State<GetReadyScreen> {
   Widget build(BuildContext context) {
     final ScenarioArguments args = ModalRoute.of(context).settings.arguments;
     var timer = context.watch<TimerModel>();
-    timer.seconds = 15 * args.numItems;
+    // timer.seconds = 15 * args.numItems;
+    timer.seconds = 0;
     totalSeconds = timer.seconds;
     return Scaffold(
       body: SafeArea(
@@ -55,10 +56,10 @@ class _GetReadyScreenState extends State<GetReadyScreen> {
             Center(
               child: Column(
                 children: [
-                  Text(
+/*                   Text(
                     'เวลาทั้งหมด ${totalSeconds} วินาที',
                     style: kAppItemTextStyle,
-                  ),
+                  ), */
                   SizedBox(
                     height: 10,
                   ),
