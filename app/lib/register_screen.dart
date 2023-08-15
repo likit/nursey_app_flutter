@@ -3,7 +3,7 @@ import 'constants.dart';
 import 'widgets/themedContainer.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 
-class LoginScreen extends StatelessWidget {
+class RegisterScreen extends StatelessWidget {
   final FirebaseAuth auth = FirebaseAuth.instance;
 
   @override
@@ -25,12 +25,12 @@ class LoginScreen extends StatelessWidget {
             ),
             Padding(
               padding: const EdgeInsets.all(20.0),
-              child: LoginForm(
+              child: RegisterForm(
                 signInMethod: logIn,
               ),
             ),
             Text(
-              'กรุณาลงชื่อเข้าใช้งานหรือลงทะเบียนเพื่อใช้งาน',
+              'ลงทะเบียนเพื่อใช้งานโดยใช้อีเมลของสถาบัน',
               style: kAppTextStyle,
             )
           ],
@@ -56,26 +56,29 @@ class LoginScreen extends StatelessWidget {
   }
 }
 
-class LoginForm extends StatefulWidget {
+class RegisterForm extends StatefulWidget {
   final Function signInMethod;
 
-  const LoginForm({Key key, this.signInMethod}) : super(key: key);
+  const RegisterForm({Key key, this.signInMethod}) : super(key: key);
   @override
-  _LoginFormState createState() => _LoginFormState(signInMethod: signInMethod);
+  _RegisterFormState createState() =>
+      _RegisterFormState(signInMethod: signInMethod);
 }
 
-class _LoginFormState extends State<LoginForm> {
+class _RegisterFormState extends State<RegisterForm> {
   final _formKey = GlobalKey<FormState>();
   final Function signInMethod;
   final _emailController = TextEditingController();
   final _passwordController = TextEditingController();
+  final _confirmPasswordController = TextEditingController();
 
-  _LoginFormState({this.signInMethod});
+  _RegisterFormState({this.signInMethod});
 
   @override
   void dispose() {
     _emailController.dispose();
     _passwordController.dispose();
+    _confirmPasswordController.dispose();
     super.dispose();
   }
 
@@ -108,7 +111,20 @@ class _LoginFormState extends State<LoginForm> {
               obscureText: true,
               validator: (value) {
                 if (value.isEmpty) {
-                  return 'Enter your email';
+                  return 'Enter your password';
+                }
+                return null;
+              },
+            ),
+            TextFormField(
+              decoration: InputDecoration(
+                hintText: 'Confirm Password',
+              ),
+              controller: _confirmPasswordController,
+              obscureText: true,
+              validator: (value) {
+                if (value.isEmpty) {
+                  return 'Re-enter your password';
                 }
                 return null;
               },
@@ -124,31 +140,36 @@ class _LoginFormState extends State<LoginForm> {
                   child: Padding(
                     padding: const EdgeInsets.all(8.0),
                     child: Text(
-                      'Log In',
+                      'Register',
                       style: kAppTextStyle,
                     ),
                   ),
                   onPressed: () async {
-                    if (_formKey.currentState.validate()) {
-                      try {
-                        UserCredential userCredential = await FirebaseAuth
-                            .instance
-                            .signInWithEmailAndPassword(
-                          email: _emailController.text,
-                          password: _passwordController.text,
-                        );
-                        _showAlertDialog();
-                      } on FirebaseAuthException catch (e) {
-                        if (e.code == 'user-not-found') {
-                          _showFailedLoginDialog(e.code);
-                        } else if (e.code == 'wrong-password') {
-                          _showFailedLoginDialog(e.code);
-                        } else {
-                          _showFailedLoginDialog(e.code);
+                    if (_passwordController.text ==
+                        _confirmPasswordController.text) {
+                      if (_formKey.currentState.validate()) {
+                        try {
+                          UserCredential userCredential = await FirebaseAuth
+                              .instance
+                              .createUserWithEmailAndPassword(
+                            email: _emailController.text,
+                            password: _passwordController.text,
+                          );
+                          _showAlertDialog();
+                        } on FirebaseAuthException catch (e) {
+                          if (e.code == 'email-already-in-use') {
+                            _showFailedLoginDialog(e.code);
+                          } else {
+                            _showFailedLoginDialog(e.code);
+                          }
                         }
+                      } else {
+                        print('Invalid email address.');
                       }
                     } else {
-                      print('Invalid email address.');
+                      _showFailedLoginDialog('Passwords do not match.');
+                      print(
+                          '${_passwordController.text}, ${_confirmPasswordController.text}');
                     }
                   },
                 ),
@@ -160,15 +181,12 @@ class _LoginFormState extends State<LoginForm> {
                   child: Padding(
                     padding: const EdgeInsets.all(8.0),
                     child: Text(
-                      'Register',
+                      'Cancel',
                       style: kAppTextStyle,
                     ),
                   ),
                   onPressed: () {
-                    Navigator.pushNamed(
-                      context,
-                      '/register',
-                    );
+                    Navigator.pushNamed(context, '/login');
                   },
                 ),
               ],
@@ -185,19 +203,19 @@ class _LoginFormState extends State<LoginForm> {
         builder: (BuildContext context) {
           return AlertDialog(
             title: Text(
-              'Login Status',
+              'Registration Status',
               style: kAppTextStyle,
             ),
             content: Container(
               child: Text(
-                'ลงชื่อเข้าใช้งานเรียบร้อย',
+                'ลงทะเบียนเข้าใช้งานเรียบร้อย',
                 style: kAppTextStyle,
               ),
             ),
             actions: [
               RaisedButton(
                   color: Colors.lightBlue,
-                  onPressed: () => Navigator.pushNamed(context, '/lessons'),
+                  onPressed: () => Navigator.pushNamed(context, '/login'),
                   child: Padding(
                     padding: const EdgeInsets.all(8.0),
                     child: Text(
@@ -216,7 +234,7 @@ class _LoginFormState extends State<LoginForm> {
         builder: (BuildContext context) {
           return AlertDialog(
             title: Text(
-              'Login Status',
+              'Registration Status',
               style: kAppTextStyle,
             ),
             content: Container(

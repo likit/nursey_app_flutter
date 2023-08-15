@@ -1,5 +1,6 @@
 import 'package:bonfire_test/models/cart.dart';
 import 'package:bonfire_test/models/timer.dart';
+import 'package:bonfire_test/register_screen.dart';
 import 'package:bonfire_test/screens/answers.dart';
 import 'package:bonfire_test/screens/container_items.dart';
 import 'package:bonfire_test/screens/getting_ready.dart';
@@ -42,6 +43,7 @@ class MyApp extends StatelessWidget {
       initialRoute: '/login',
       routes: {
         '/login': (context) => LoginScreen(),
+        '/register': (context) => RegisterScreen(),
         '/lessons': (context) => LessonScreen(),
         '/scenarios': (context) => ScenarioScreen(),
         '/map': (context) => MapScreen(),

@@ -27,6 +27,22 @@ class LessonScreen extends StatelessWidget {
                 child: LessonList(),
               ),
             ),
+            RaisedButton(
+              color: Colors.lightBlue,
+              child: Padding(
+                padding: const EdgeInsets.all(8.0),
+                child: Text(
+                  'Back',
+                  style: kAppTextStyle,
+                ),
+              ),
+              onPressed: () {
+                Navigator.pushNamed(
+                  context,
+                  '/login',
+                );
+              },
+            ),
           ],
         ),
       ),
