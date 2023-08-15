@@ -197,7 +197,7 @@ class _LoginFormState extends State<LoginForm> {
             actions: [
               RaisedButton(
                   color: Colors.lightBlue,
-                  onPressed: () => Navigator.pushNamed(context, '/lessons'),
+                  onPressed: () => Navigator.pushNamed(context, '/menu'),
                   child: Padding(
                     padding: const EdgeInsets.all(8.0),
                     child: Text(

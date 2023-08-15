@@ -6,6 +6,7 @@ import 'package:bonfire_test/screens/container_items.dart';
 import 'package:bonfire_test/screens/getting_ready.dart';
 import 'package:bonfire_test/screens/item_list.dart';
 import 'package:bonfire_test/screens/map.dart';
+import 'package:bonfire_test/screens/menu.dart';
 import 'package:bonfire_test/screens/scenario_list.dart';
 import 'package:bonfire_test/screens/lesson_list.dart';
 import 'package:bonfire_test/screens/scores.dart';
@@ -44,6 +45,7 @@ class MyApp extends StatelessWidget {
       routes: {
         '/login': (context) => LoginScreen(),
         '/register': (context) => RegisterScreen(),
+        '/menu': (context) => MenuScreen(),
         '/lessons': (context) => LessonScreen(),
         '/scenarios': (context) => ScenarioScreen(),
         '/map': (context) => MapScreen(),

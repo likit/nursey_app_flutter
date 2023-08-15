@@ -39,7 +39,7 @@ class LessonScreen extends StatelessWidget {
               onPressed: () {
                 Navigator.pushNamed(
                   context,
-                  '/login',
+                  '/menu',
                 );
               },
             ),
