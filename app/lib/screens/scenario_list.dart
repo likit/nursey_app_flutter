@@ -87,7 +87,7 @@ class _ScenarioListState extends State<ScenarioList> {
   @override
   Widget build(BuildContext context) {
     return StreamBuilder(
-      stream: firestore.collection('scenarios').snapshots(),
+      stream: firestore.collection('scenarios').orderBy("number").snapshots(),
       builder: (BuildContext context, AsyncSnapshot<QuerySnapshot> snapshot) {
         if (!snapshot.hasData) {
           return Center(
