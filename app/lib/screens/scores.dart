@@ -4,6 +4,7 @@ import 'package:bonfire_test/constants.dart';
 import 'package:bonfire_test/models/cart.dart';
 import 'package:bonfire_test/models/scenarios.dart';
 import 'package:bonfire_test/models/timer.dart';
+import 'package:bonfire_test/screens/menu.dart';
 import 'package:bonfire_test/screens/scenario_list.dart';
 import 'package:bonfire_test/widgets/themedContainer.dart';
 import 'package:flutter/material.dart';
@@ -230,7 +231,8 @@ class _ScoreScreenState extends State<ScoreScreen> {
                     color: Colors.pinkAccent,
                     onPressed: () {
                       cart.clear();
-                      return Navigator.pushNamed(context, '/scenarios');
+                      return Navigator.pushNamed(context, '/scenarios',
+                          arguments: SessionArguments(args.sessionId));
                     },
                     child: Padding(
                       padding: const EdgeInsets.all(8.0),

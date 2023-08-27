@@ -41,10 +41,10 @@ class _MenuScreenState extends State<MenuScreen> {
               ),
             ),
             SizedBox(
-              height: 30.0,
+              height: 20.0,
             ),
             Padding(
-              padding: const EdgeInsets.all(20.0),
+              padding: const EdgeInsets.all(10.0),
               child: RaisedButton(
                 color: Colors.lightBlue,
                 child: Padding(
@@ -68,7 +68,7 @@ class _MenuScreenState extends State<MenuScreen> {
               ),
             ),
             Padding(
-              padding: const EdgeInsets.all(20.0),
+              padding: const EdgeInsets.all(10.0),
               child: RaisedButton(
                 color: Colors.lightBlue,
                 child: Padding(
@@ -78,7 +78,7 @@ class _MenuScreenState extends State<MenuScreen> {
               ),
             ),
             Padding(
-              padding: const EdgeInsets.all(20.0),
+              padding: const EdgeInsets.all(10.0),
               child: RaisedButton(
                 color: Colors.lightBlue,
                 child: Padding(
@@ -88,19 +88,21 @@ class _MenuScreenState extends State<MenuScreen> {
                     {Navigator.pushNamed(context, '/scenarios_review')},
               ),
             ),
+            SizedBox(
+              height: 20.0,
+            ),
             Text(
               'คู่มือการใช้งาน',
               style: kAppTextStyle,
             ),
             Padding(
-                padding: EdgeInsets.all(20.0),
+                padding: EdgeInsets.all(15.0),
                 child: SingleChildScrollView(
                   scrollDirection: Axis.vertical,
                   child: Text(
                     '1) ท่านสามารถเลือกสร้าง session ใหม่หรือเล่นต่อจาก session เดิมได้ในหน้าประวัติ' +
-                        '\n\n2) โปรแกรมจะบันทึกคะแนนเมื่อท่านเข้าดูคะแนนและกดปุ่มบันทึกคะแนน' +
-                        '\n\n3) ท่านสามารถทบทวนอุปกรณ์ต่าง ๆ ได้ในเมนูทบทวน' +
-                        '\n\n4) ท่านสามารถดูแผนที่เพื่อศึกษาได้ก่อนเล่นจริง' +
+                        '\n2) โปรแกรมจะบันทึกคะแนนเมื่อท่านเข้าดูคะแนนและกดปุ่มบันทึกคะแนน' +
+                        '\n3) ท่านสามารถทบทวนอุปกรณ์ต่าง ๆ ได้ในเมนูทบทวน' +
                         '',
                     style: kAppTextStyle,
                   ),
