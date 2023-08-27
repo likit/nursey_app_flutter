@@ -5,12 +5,15 @@ import 'package:bonfire_test/constants.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:provider/provider.dart';
 
+import 'menu.dart';
+
 class ScenarioArguments {
   final String id;
   final String title;
   final int numItems;
+  final String sessionId;
 
-  ScenarioArguments(this.id, this.title, this.numItems);
+  ScenarioArguments(this.id, this.title, this.numItems, this.sessionId);
 }
 
 class ScenarioScreen extends StatelessWidget {
@@ -87,6 +90,7 @@ class _ScenarioListState extends State<ScenarioList> {
 
   @override
   Widget build(BuildContext context) {
+    SessionArguments args = ModalRoute.of(context).settings.arguments;
     var scenarioQueue = context.watch<ScenarioQueueModel>();
     return StreamBuilder(
       stream: firestore.collection('scenarios').orderBy("number").snapshots(),
@@ -107,7 +111,8 @@ class _ScenarioListState extends State<ScenarioList> {
                     arguments: ScenarioArguments(
                         doc.id,
                         (doc.data() as Map)['title'],
-                        (doc.data() as Map)['answers'].length),
+                        (doc.data() as Map)['answers'].length,
+                        args.sessionId),
                   );
                 },
                 child: Card(

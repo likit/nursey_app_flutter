@@ -2,7 +2,8 @@ import 'package:bonfire_test/constants.dart';
 import 'package:bonfire_test/widgets/themedContainer.dart';
 import 'package:flutter/material.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
-import 'package:flutter/widgets.dart';
+
+import 'menu.dart';
 
 class LessonScreen extends StatelessWidget {
   @override
@@ -27,22 +28,25 @@ class LessonScreen extends StatelessWidget {
                 child: LessonList(),
               ),
             ),
-            RaisedButton(
-              color: Colors.lightBlue,
-              child: Padding(
-                padding: const EdgeInsets.all(8.0),
-                child: Text(
-                  'Back',
-                  style: kAppTextStyle,
+            Padding(
+              padding: EdgeInsets.all(20.0),
+              child: RaisedButton(
+                color: Colors.lightBlue,
+                child: Padding(
+                  padding: const EdgeInsets.all(8.0),
+                  child: Text(
+                    'Back',
+                    style: kAppTextStyle,
+                  ),
                 ),
+                onPressed: () {
+                  Navigator.pushNamed(
+                    context,
+                    '/menu',
+                  );
+                },
               ),
-              onPressed: () {
-                Navigator.pushNamed(
-                  context,
-                  '/menu',
-                );
-              },
-            ),
+            )
           ],
         ),
       ),
@@ -61,6 +65,7 @@ class _LessonListState extends State<LessonList> {
 
   @override
   Widget build(BuildContext context) {
+    SessionArguments args = ModalRoute.of(context).settings.arguments;
     return StreamBuilder(
       stream: firestore.collection('lessons').snapshots(),
       builder: (BuildContext context, AsyncSnapshot<QuerySnapshot> snapshot) {
@@ -73,7 +78,8 @@ class _LessonListState extends State<LessonList> {
             children: snapshot.data.docs.map((doc) {
               return GestureDetector(
                 onTap: () {
-                  Navigator.pushNamed(context, '/scenarios');
+                  Navigator.pushNamed(context, '/scenarios',
+                      arguments: SessionArguments(args.sessionId));
                 },
                 child: Card(
                   child: ListTile(

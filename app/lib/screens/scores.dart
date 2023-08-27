@@ -18,6 +18,8 @@ class ScoreScreen extends StatefulWidget {
 class _ScoreScreenState extends State<ScoreScreen> {
   int score = 0;
   FirebaseFirestore firestore = FirebaseFirestore.instance;
+  List<String> correctItems = [];
+  List<String> wrongItems = [];
 
   @override
   void initState() {
@@ -36,10 +38,12 @@ class _ScoreScreenState extends State<ScoreScreen> {
             if ((snapshot.data() as Map)['answers'].contains(itemId)) {
               setState(() {
                 score += 1;
+                correctItems.add(itemId);
               });
             } else {
               setState(() {
                 score -= 1;
+                wrongItems.add(itemId);
               });
             }
           });
@@ -167,75 +171,100 @@ class _ScoreScreenState extends State<ScoreScreen> {
                 },
               ),
             ),
-            Row(
-              mainAxisAlignment: MainAxisAlignment.center,
-              children: [
-                RaisedButton(
-                  color: Colors.lightBlueAccent,
-                  onPressed: () =>
-                      Navigator.pushNamed(context, '/answers', arguments: args),
-                  child: Padding(
-                    padding: const EdgeInsets.all(8.0),
-                    child: Text(
-                      'ดูเฉลย',
-                      style: kAppTextStyle,
+            Padding(
+              padding: EdgeInsets.all(20.0),
+              child: Row(
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: [
+                  RaisedButton(
+                    color: Colors.lightBlueAccent,
+                    onPressed: () => Navigator.pushNamed(context, '/answers',
+                        arguments: args),
+                    child: Padding(
+                      padding: const EdgeInsets.all(8.0),
+                      child: Text(
+                        'ดูเฉลย',
+                        style: kAppTextStyle,
+                      ),
                     ),
                   ),
-                ),
-                SizedBox(
-                  width: 10,
-                ),
-                RaisedButton(
-                  color: Colors.pinkAccent,
-                  onPressed: () {
-                    cart.clear();
-                    return Navigator.pushNamed(context, '/scenarios');
-                  },
-                  child: Padding(
-                    padding: const EdgeInsets.all(8.0),
-                    child: Text(
-                      'ออก',
-                      style: kAppTextStyle,
+                  SizedBox(
+                    width: 10,
+                  ),
+                  RaisedButton(
+                    color: Colors.pinkAccent,
+                    onPressed: () {
+                      cart.clear();
+                      return Navigator.pushNamed(context, '/scenarios');
+                    },
+                    child: Padding(
+                      padding: const EdgeInsets.all(8.0),
+                      child: Text(
+                        'ออก',
+                        style: kAppTextStyle,
+                      ),
                     ),
                   ),
-                ),
-                SizedBox(
-                  width: 10,
-                ),
-                RaisedButton(
-                  color: Colors.blueGrey,
-                  onPressed: () {
-                    cart.clear();
-                    firestore
-                        .collection('scenarios')
-                        .doc(scenarioQueue.items[nextIndex])
-                        .get()
-                        .then((DocumentSnapshot snapshot) {
-                      if (snapshot.exists) {
-                        return Navigator.pushNamed(
-                          context,
-                          '/get-ready',
-                          arguments: ScenarioArguments(
-                              snapshot.id,
-                              (snapshot.data() as Map)['title'],
-                              (snapshot.data() as Map)['answers'].length),
-                        );
-                      }
-                    });
-                  },
-                  child: Padding(
-                    padding: const EdgeInsets.all(8.0),
-                    child: Text(
-                      'ต่อไป',
-                      style: kAppTextStyle,
+                  SizedBox(
+                    width: 10,
+                  ),
+                  RaisedButton(
+                    color: Colors.blueGrey,
+                    onPressed: () {
+                      cart.clear();
+                      firestore
+                          .collection('plays')
+                          .add({
+                            'sessionId': args.sessionId,
+                            'scores': score,
+                            'correct': correctItems,
+                            'wrong': wrongItems,
+                            'savedAt': Timestamp.now(),
+                            'time': usedTime,
+                          })
+                          .then((value) => {print('Data have been saved.')})
+                          .catchError((value) => {print('Error happened')});
+                      firestore
+                          .collection('scenarios')
+                          .doc(scenarioQueue.items[nextIndex])
+                          .get()
+                          .then((DocumentSnapshot snapshot) {
+                        if (snapshot.exists) {
+                          return Navigator.pushNamed(
+                            context,
+                            '/get-ready',
+                            arguments: ScenarioArguments(
+                                snapshot.id,
+                                (snapshot.data() as Map)['title'],
+                                (snapshot.data() as Map)['answers'].length,
+                                args.sessionId),
+                          );
+                        }
+                      });
+                    },
+                    child: Padding(
+                      padding: const EdgeInsets.all(8.0),
+                      child: Text(
+                        'ต่อไป',
+                        style: kAppTextStyle,
+                      ),
                     ),
                   ),
-                ),
-              ],
-            ),
+                ],
+              ),
+            )
           ],
         ),
       ),
     );
   }
+}
+
+Future<void> saveData(Map<String, dynamic> data) async {
+  FirebaseFirestore firestore = FirebaseFirestore.instance;
+  await firestore
+      .collection('plays')
+      .add(data)
+      .then((value) => {print('Data have been saved.')})
+      .catchError((value) => {print('Error happened')});
 }

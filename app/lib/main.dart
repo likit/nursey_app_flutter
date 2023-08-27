@@ -14,6 +14,7 @@ import 'package:bonfire_test/screens/lesson_list.dart';
 import 'package:bonfire_test/screens/scores.dart';
 import 'package:bonfire_test/screens/select_items.dart';
 import 'package:provider/provider.dart';
+import 'models/session.dart';
 import 'screens/play_map.dart';
 import 'package:flutter/material.dart';
 import 'package:bonfire_test/login_screen.dart';
@@ -34,6 +35,9 @@ void main() async {
         ),
         ChangeNotifierProvider(
           create: (context) => ScenarioQueueModel(),
+        ),
+        ChangeNotifierProvider(
+          create: (context) => SessionModel(),
         )
       ],
       child: MyApp(),
