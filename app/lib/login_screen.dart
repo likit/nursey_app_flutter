@@ -32,6 +32,10 @@ class LoginScreen extends StatelessWidget {
             Text(
               'กรุณาลงชื่อเข้าใช้งานหรือลงทะเบียนเพื่อใช้งาน',
               style: kAppTextStyle,
+            ),
+            Text(
+              'โปรแกรมนี้ออกแบบมาเพื่อใช้งานบนโทรศัพท์หรือ tablet เท่านั้น',
+              style: kAppTextStyle,
             )
           ],
         ),
