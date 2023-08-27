@@ -3,7 +3,6 @@ import 'package:flutter/material.dart';
 import 'package:bonfire_test/item_container.dart';
 import 'package:flutter/gestures.dart';
 import 'package:tuple/tuple.dart';
-import 'play_map.dart' show ListItemArguments;
 
 String containerId = '';
 String containerName = '';
@@ -67,7 +66,8 @@ class _MainContentState extends State<MainContent> {
                         context,
                         '/container-item',
                         arguments: ContainerArguments(
-                            containerId: containerId, containerName: containerName),
+                            containerId: containerId,
+                            containerName: containerName),
                       );
                     }
                   },
@@ -157,7 +157,7 @@ class _RoomMapState extends State<RoomMap> {
           child: Container(
             key: _keyMapImage,
             color: Colors.yellow.shade100,
-            child: Image.asset('assets/images/room4.png'),
+            child: Image.asset('assets/images/room4_labels.png'),
           ),
         ),
         Text(
