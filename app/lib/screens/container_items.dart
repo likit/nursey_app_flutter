@@ -44,16 +44,6 @@ class ContainerItem extends StatelessWidget {
                       child: CircularProgressIndicator(),
                     );
                   } else {
-                    var sortedImages = [];
-                    Future<List> fetchImageData() async {
-                      await containerSnapshot.data['images'].forEach((image)=>{
-                        firestore.collection('images').doc(image).get().then((snapshot)=>{
-                          sortedImages.add(snapshot)
-                        })
-                      });
-                      sortedImages.sort((a, b)=> a.data['group'].compareTo(b.data['group']));
-                      return sortedImages;
-                    }
                     return GridView.builder(
                       scrollDirection: Axis.horizontal,
                       gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
@@ -61,47 +51,48 @@ class ContainerItem extends StatelessWidget {
                       shrinkWrap: true,
                       itemCount: containerSnapshot.data['images'].length,
                       itemBuilder: (context, index) {
-                        return FutureBuilder(
-                            future: fetchImageData(),
+                        return StreamBuilder(
+                            stream: firestore
+                                .collection('images')
+                                .doc(containerSnapshot.data['images'][index])
+                                .snapshots(),
                             builder: (context, itemSnapshot) {
                               if (itemSnapshot.hasData) {
                                 return FutureBuilder(
                                   future: storage
-                                      .ref(itemSnapshot.data["fileUrl"])
+                                      .ref(itemSnapshot.data['fileUrl'])
                                       .getDownloadURL(),
                                   builder: (context, downloadUrl) {
                                     if (downloadUrl.hasData) {
-                                      return Container(
-                                        margin: EdgeInsets.all(5),
-                                        child: Column(
-                                          mainAxisAlignment:
-                                              MainAxisAlignment.spaceEvenly,
-                                          children: [
-                                            Image.network(
-                                              downloadUrl.data,
-                                              width: 180,
-                                              height: 120,
-                                            ),
-                                            Padding(
-                                              padding: EdgeInsets.all(8.0),
-                                              child: Text(
-                                                itemSnapshot.data['name'],
-                                                style: kAppTextStyle,
+                                      return GestureDetector(
+                                        child: Container(
+                                          margin: EdgeInsets.all(5),
+                                          child: Column(
+                                            mainAxisAlignment:
+                                                MainAxisAlignment.spaceEvenly,
+                                            children: [
+                                              Image.network(
+                                                downloadUrl.data,
+                                                width: 180,
+                                                height: 120,
                                               ),
-                                            ),
-                                            Text(
-                                              itemSnapshot.data['group'],
-                                              style: kAppTextStyle,
-                                            )
-                                          ],
-                                        ),
-                                        alignment: Alignment.center,
-                                        decoration: BoxDecoration(
-                                          color: Colors.brown.shade50,
-                                          borderRadius:
-                                              BorderRadius.circular(18.0),
-                                          border: Border.all(
-                                              color: Colors.brown, width: 4),
+                                              Padding(
+                                                padding: EdgeInsets.all(8.0),
+                                                child: Text(
+                                                  itemSnapshot.data['name'],
+                                                  style: kAppTextStyle,
+                                                ),
+                                              ),
+                                            ],
+                                          ),
+                                          alignment: Alignment.center,
+                                          decoration: BoxDecoration(
+                                            color: Colors.brown.shade50,
+                                            borderRadius:
+                                                BorderRadius.circular(18.0),
+                                            border: Border.all(
+                                                color: Colors.brown, width: 4),
+                                          ),
                                         ),
                                       );
                                     } else {
@@ -112,7 +103,7 @@ class ContainerItem extends StatelessWidget {
                                   },
                                 );
                               } else {
-                                return Text('Error.');
+                                return Text('Loading..');
                               }
                             });
                       },
