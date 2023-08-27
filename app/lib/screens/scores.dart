@@ -1,5 +1,6 @@
 import 'package:bonfire_test/constants.dart';
 import 'package:bonfire_test/models/cart.dart';
+import 'package:bonfire_test/models/scenarios.dart';
 import 'package:bonfire_test/models/timer.dart';
 import 'package:bonfire_test/screens/scenario_list.dart';
 import 'package:bonfire_test/widgets/themedContainer.dart';
@@ -7,6 +8,7 @@ import 'package:flutter/material.dart';
 import 'package:firebase_storage/firebase_storage.dart' as firebase_storage;
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:provider/provider.dart';
+import 'dart:async';
 
 class ScoreScreen extends StatefulWidget {
   @override
@@ -55,6 +57,8 @@ class _ScoreScreenState extends State<ScoreScreen> {
     int usedTime = seconds;
     firebase_storage.FirebaseStorage storage =
         firebase_storage.FirebaseStorage.instance;
+    var scenarioQueue = context.watch<ScenarioQueueModel>();
+    var nextIndex = scenarioQueue.items.indexOf(args.id) + 1;
 
     return Scaffold(
       body: SafeArea(
@@ -191,6 +195,38 @@ class _ScoreScreenState extends State<ScoreScreen> {
                     padding: const EdgeInsets.all(8.0),
                     child: Text(
                       'ออก',
+                      style: kAppTextStyle,
+                    ),
+                  ),
+                ),
+                SizedBox(
+                  width: 10,
+                ),
+                RaisedButton(
+                  color: Colors.blueGrey,
+                  onPressed: () {
+                    cart.clear();
+                    firestore
+                        .collection('scenarios')
+                        .doc(scenarioQueue.items[nextIndex])
+                        .get()
+                        .then((DocumentSnapshot snapshot) {
+                      if (snapshot.exists) {
+                        return Navigator.pushNamed(
+                          context,
+                          '/get-ready',
+                          arguments: ScenarioArguments(
+                              snapshot.id,
+                              (snapshot.data() as Map)['title'],
+                              (snapshot.data() as Map)['answers'].length),
+                        );
+                      }
+                    });
+                  },
+                  child: Padding(
+                    padding: const EdgeInsets.all(8.0),
+                    child: Text(
+                      'ต่อไป',
                       style: kAppTextStyle,
                     ),
                   ),

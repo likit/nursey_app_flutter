@@ -1,4 +1,5 @@
 import 'package:bonfire_test/models/cart.dart';
+import 'package:bonfire_test/models/scenarios.dart';
 import 'package:bonfire_test/models/timer.dart';
 import 'package:bonfire_test/register_screen.dart';
 import 'package:bonfire_test/screens/answers.dart';
@@ -30,6 +31,9 @@ void main() async {
         ),
         ChangeNotifierProvider(
           create: (context) => TimerModel(),
+        ),
+        ChangeNotifierProvider(
+          create: (context) => ScenarioQueueModel(),
         )
       ],
       child: MyApp(),

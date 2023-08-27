@@ -1,8 +1,9 @@
 import 'package:bonfire_test/widgets/themedContainer.dart';
+import 'package:bonfire_test/models/scenarios.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter/widgets.dart';
 import 'package:bonfire_test/constants.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:provider/provider.dart';
 
 class ScenarioArguments {
   final String id;
@@ -86,6 +87,7 @@ class _ScenarioListState extends State<ScenarioList> {
 
   @override
   Widget build(BuildContext context) {
+    var scenarioQueue = context.watch<ScenarioQueueModel>();
     return StreamBuilder(
       stream: firestore.collection('scenarios').orderBy("number").snapshots(),
       builder: (BuildContext context, AsyncSnapshot<QuerySnapshot> snapshot) {
@@ -96,6 +98,7 @@ class _ScenarioListState extends State<ScenarioList> {
         } else {
           return ListView(
             children: snapshot.data.docs.map((doc) {
+              scenarioQueue.update(doc.id);
               return GestureDetector(
                 onTap: () {
                   Navigator.pushNamed(
@@ -111,7 +114,7 @@ class _ScenarioListState extends State<ScenarioList> {
                   child: ListTile(
                     leading: Icon(Icons.play_arrow),
                     title: Text(
-                      (doc.data() as Map)['title'],
+                      '${(doc.data() as Map)['number'].toString()}) ${(doc.data() as Map)['title']}',
                       style: kAppTextStyle,
                     ),
                   ),

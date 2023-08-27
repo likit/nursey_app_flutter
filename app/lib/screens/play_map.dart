@@ -190,7 +190,7 @@ class _RoomMapState extends State<RoomMap> {
           child: Container(
             key: _keyMapImage,
             color: Colors.yellow.shade100,
-            child: Image.asset('assets/images/room4.png'),
+            child: Image.asset('assets/images/room4_labels.png'),
           ),
         ),
         Padding(
