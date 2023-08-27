@@ -6,6 +6,8 @@ import 'package:bonfire_test/screens/answers.dart';
 import 'package:bonfire_test/screens/answers_review.dart';
 import 'package:bonfire_test/screens/container_items.dart';
 import 'package:bonfire_test/screens/getting_ready.dart';
+import 'package:bonfire_test/screens/history.dart';
+import 'package:bonfire_test/screens/history_scenarios.dart';
 import 'package:bonfire_test/screens/item_list.dart';
 import 'package:bonfire_test/screens/map.dart';
 import 'package:bonfire_test/screens/menu.dart';
@@ -56,6 +58,8 @@ class MyApp extends StatelessWidget {
         '/scenarios': (context) => ScenarioScreen(),
         '/scenarios_review': (context) => ScenarioReviewScreen(),
         '/map': (context) => MapScreen(),
+        '/history': (context) => HistoryScreen(),
+        '/history_scenarios': (context) => HistoryScenarioScreen(),
         '/playmap': (context) => PlayMapScreen(),
         '/container-item': (context) => ContainerItem(),
         '/item-list': (context) => ItemList(),

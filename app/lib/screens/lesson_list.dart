@@ -35,15 +35,12 @@ class LessonScreen extends StatelessWidget {
                 child: Padding(
                   padding: const EdgeInsets.all(8.0),
                   child: Text(
-                    'Back',
+                    'กลับ',
                     style: kAppTextStyle,
                   ),
                 ),
                 onPressed: () {
-                  Navigator.pushNamed(
-                    context,
-                    '/menu',
-                  );
+                  Navigator.pushNamed(context, '/menu');
                 },
               ),
             )

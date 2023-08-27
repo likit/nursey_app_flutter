@@ -1,28 +1,14 @@
 import 'package:bonfire_test/widgets/themedContainer.dart';
-import 'package:bonfire_test/models/scenarios.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:bonfire_test/constants.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
-import 'package:provider/provider.dart';
 
 import 'menu.dart';
 
-class ScenarioArguments {
-  final String id;
-  final String title;
-  final int numItems;
-  final String sessionId;
-
-  ScenarioArguments(this.id, this.title, this.numItems, this.sessionId);
-}
-
-class ScenarioScreen extends StatelessWidget {
+class HistoryScreen extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
-    SessionArguments args = ModalRoute.of(context).settings.arguments;
-    if (args?.sessionId == null) {
-      Navigator.pushNamed(context, '/menu');
-    }
     return Scaffold(
       body: SafeArea(
         child: Column(
@@ -30,17 +16,22 @@ class ScenarioScreen extends StatelessWidget {
             ThemedContainer(
               height: 70,
               child: Text(
-                'สถานการณ์',
+                'History',
                 style: kAppTitleTextStyle,
               ),
             ),
             SizedBox(
               height: 20,
             ),
+            Padding(
+              padding: EdgeInsets.all(10.0),
+              child: Text('เลือก session ที่ต้องการเพื่อเล่นต่อ',
+                  style: kAppTextStyle),
+            ),
             Expanded(
               child: Padding(
                 padding: const EdgeInsets.all(15.0),
-                child: ScenarioList(),
+                child: HistorySessionList(),
               ),
             ),
             Padding(
@@ -57,22 +48,7 @@ class ScenarioScreen extends StatelessWidget {
                         style: kAppTextStyle,
                       ),
                     ),
-                    onPressed: () => Navigator.pushNamed(context, '/lessons',
-                        arguments: SessionArguments(args.sessionId)),
-                  ),
-                  SizedBox(
-                    width: 10,
-                  ),
-                  RaisedButton(
-                    color: Colors.lightBlueAccent,
-                    child: Padding(
-                      padding: const EdgeInsets.all(8.0),
-                      child: Text(
-                        'แผนที่',
-                        style: kAppTextStyle,
-                      ),
-                    ),
-                    onPressed: () => Navigator.pushNamed(context, '/map'),
+                    onPressed: () => Navigator.pop(context),
                   ),
                 ],
               ),
@@ -84,21 +60,23 @@ class ScenarioScreen extends StatelessWidget {
   }
 }
 
-class ScenarioList extends StatefulWidget {
+class HistorySessionList extends StatefulWidget {
   @override
-  _ScenarioListState createState() => _ScenarioListState();
+  _HistorySessionListState createState() => _HistorySessionListState();
 }
 
-class _ScenarioListState extends State<ScenarioList> {
+class _HistorySessionListState extends State<HistorySessionList> {
   FirebaseFirestore firestore = FirebaseFirestore.instance;
+  final FirebaseAuth auth = FirebaseAuth.instance;
   List<Widget> lessons;
 
   @override
   Widget build(BuildContext context) {
-    SessionArguments args = ModalRoute.of(context).settings.arguments;
-    var scenarioQueue = context.watch<ScenarioQueueModel>();
     return StreamBuilder(
-      stream: firestore.collection('scenarios').orderBy("number").snapshots(),
+      stream: firestore
+          .collection('sessions')
+          .orderBy("created_at", descending: true)
+          .snapshots(),
       builder: (BuildContext context, AsyncSnapshot<QuerySnapshot> snapshot) {
         if (!snapshot.hasData) {
           return Center(
@@ -107,26 +85,19 @@ class _ScenarioListState extends State<ScenarioList> {
         } else {
           return ListView(
             children: snapshot.data.docs.map((doc) {
-              scenarioQueue.update(doc.id);
+              var datetime = (doc.data() as Map)['created_at'];
               return GestureDetector(
                 onTap: () {
                   Navigator.pushNamed(
                     context,
-                    '/get-ready',
-                    arguments: ScenarioArguments(
-                        doc.id,
-                        (doc.data() as Map)['title'],
-                        (doc.data() as Map)['answers'].length,
-                        args.sessionId),
+                    '/history_scenarios',
+                    arguments: SessionArguments(doc.id),
                   );
                 },
                 child: Card(
                   child: ListTile(
                     leading: Icon(Icons.play_arrow),
-                    title: Text(
-                      '${(doc.data() as Map)['number'].toString()}) ${(doc.data() as Map)['title']}',
-                      style: kAppTextStyle,
-                    ),
+                    title: Text('${datetime.toDate()}', style: kAppTextStyle),
                   ),
                 ),
               );

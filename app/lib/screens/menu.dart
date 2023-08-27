@@ -74,8 +74,7 @@ class _MenuScreenState extends State<MenuScreen> {
                 child: Padding(
                     padding: const EdgeInsets.all(8.0),
                     child: Text('ประวัติการเล่น', style: kAppTextStyle)),
-                onPressed: () =>
-                    {Navigator.pushNamed(context, '/scenarios_review')},
+                onPressed: () => {Navigator.pushNamed(context, '/history')},
               ),
             ),
             Padding(
@@ -89,6 +88,25 @@ class _MenuScreenState extends State<MenuScreen> {
                     {Navigator.pushNamed(context, '/scenarios_review')},
               ),
             ),
+            Text(
+              'คู่มือการใช้งาน',
+              style: kAppTextStyle,
+            ),
+            Padding(
+              padding: EdgeInsets.all(20.0),
+              child: Expanded(
+                  child: SingleChildScrollView(
+                scrollDirection: Axis.vertical,
+                child: Text(
+                  '1) ท่านสามารถเลือกสร้าง session ใหม่หรือเล่นต่อจาก session เดิมได้ในหน้าประวัติ' +
+                      '\n\n2) โปรแกรมจะบันทึกคะแนนเมื่อท่านเข้าดูคะแนนและกดปุ่มบันทึกคะแนน' +
+                      '\n\n3) ท่านสามารถทบทวนอุปกรณ์ต่าง ๆ ได้ในเมนูทบทวน' +
+                      '\n\n4) ท่านสามารถดูแผนที่เพื่อศึกษาได้ก่อนเล่นจริง' +
+                      '',
+                  style: kAppTextStyle,
+                ),
+              )),
+            )
           ],
         ),
       ),

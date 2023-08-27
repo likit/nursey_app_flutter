@@ -1,3 +1,5 @@
+import 'dart:convert';
+
 import 'package:bonfire_test/constants.dart';
 import 'package:bonfire_test/models/cart.dart';
 import 'package:bonfire_test/models/scenarios.dart';
@@ -50,6 +52,39 @@ class _ScoreScreenState extends State<ScoreScreen> {
         }
       });
     });
+  }
+
+  void _showAlertDialog(String message) {
+    showDialog(
+        context: context,
+        builder: (BuildContext context) {
+          return AlertDialog(
+            title: Text(
+              'Save Status',
+              style: kAppTextStyle,
+            ),
+            content: Container(
+              child: Text(
+                message,
+                style: kAppTextStyle,
+              ),
+            ),
+            actions: [
+              RaisedButton(
+                  color: Colors.lightBlue,
+                  onPressed: () {
+                    Navigator.of(context).pop();
+                  },
+                  child: Padding(
+                    padding: const EdgeInsets.all(8.0),
+                    child: Text(
+                      'Ok',
+                      style: kAppTextStyle,
+                    ),
+                  ))
+            ],
+          );
+        });
   }
 
   @override
@@ -189,7 +224,7 @@ class _ScoreScreenState extends State<ScoreScreen> {
                     ),
                   ),
                   SizedBox(
-                    width: 10,
+                    width: 5,
                   ),
                   RaisedButton(
                     color: Colors.pinkAccent,
@@ -206,7 +241,7 @@ class _ScoreScreenState extends State<ScoreScreen> {
                     ),
                   ),
                   SizedBox(
-                    width: 10,
+                    width: 5,
                   ),
                   RaisedButton(
                     color: Colors.blueGrey,
@@ -221,9 +256,29 @@ class _ScoreScreenState extends State<ScoreScreen> {
                             'wrong': wrongItems,
                             'savedAt': Timestamp.now(),
                             'time': usedTime,
+                            'scenarioId': args.id,
+                            'scenarioTitle': args.title,
                           })
-                          .then((value) => {print('Data have been saved.')})
-                          .catchError((value) => {print('Error happened')});
+                          .then((value) =>
+                              {_showAlertDialog('บันทึกคะแนนเรียบร้อย')})
+                          .catchError(
+                              (value) => {_showAlertDialog('เกิดความผิดพลาด')});
+                    },
+                    child: Padding(
+                      padding: const EdgeInsets.all(8.0),
+                      child: Text(
+                        'บันทึก',
+                        style: kAppTextStyle,
+                      ),
+                    ),
+                  ),
+                  SizedBox(
+                    width: 5,
+                  ),
+                  RaisedButton(
+                    color: Colors.blueGrey,
+                    onPressed: () {
+                      cart.clear();
                       firestore
                           .collection('scenarios')
                           .doc(scenarioQueue.items[nextIndex])
@@ -258,13 +313,4 @@ class _ScoreScreenState extends State<ScoreScreen> {
       ),
     );
   }
-}
-
-Future<void> saveData(Map<String, dynamic> data) async {
-  FirebaseFirestore firestore = FirebaseFirestore.instance;
-  await firestore
-      .collection('plays')
-      .add(data)
-      .then((value) => {print('Data have been saved.')})
-      .catchError((value) => {print('Error happened')});
 }

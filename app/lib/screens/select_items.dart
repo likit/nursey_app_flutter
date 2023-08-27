@@ -89,7 +89,7 @@ class _SelectedItemsState extends State<SelectedItems> {
                                                     MainAxisAlignment.center,
                                                 children: [
                                                   Icon(
-                                                    Icons.cancel,
+                                                    Icons.delete,
                                                     color: Colors.red,
                                                     size: 50,
                                                   ),

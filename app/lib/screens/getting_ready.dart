@@ -1,5 +1,6 @@
 import 'dart:async';
 import 'package:bonfire_test/models/timer.dart';
+import 'package:bonfire_test/screens/menu.dart';
 import 'package:bonfire_test/widgets/themedContainer.dart';
 import 'package:bonfire_test/constants.dart';
 import 'package:bonfire_test/screens/scenario_list.dart';
@@ -88,7 +89,8 @@ class _GetReadyScreenState extends State<GetReadyScreen> {
                     ),
                     onPressed: () {
                       _timer.cancel();
-                      return Navigator.pushNamed(context, '/scenarios');
+                      return Navigator.pushNamed(context, '/scenarios',
+                          arguments: SessionArguments(args.sessionId));
                     }),
                 SizedBox(
                   width: 10,
