@@ -208,7 +208,7 @@ class _ScoreScreenState extends State<ScoreScreen> {
               ),
             ),
             Padding(
-              padding: EdgeInsets.all(20.0),
+              padding: EdgeInsets.all(10.0),
               child: Row(
                 mainAxisAlignment: MainAxisAlignment.center,
                 children: [
@@ -220,24 +220,6 @@ class _ScoreScreenState extends State<ScoreScreen> {
                       padding: const EdgeInsets.all(8.0),
                       child: Text(
                         'ดูเฉลย',
-                        style: kAppTextStyle,
-                      ),
-                    ),
-                  ),
-                  SizedBox(
-                    width: 5,
-                  ),
-                  RaisedButton(
-                    color: Colors.pinkAccent,
-                    onPressed: () {
-                      cart.clear();
-                      return Navigator.pushNamed(context, '/scenarios',
-                          arguments: SessionArguments(args.sessionId));
-                    },
-                    child: Padding(
-                      padding: const EdgeInsets.all(8.0),
-                      child: Text(
-                        'ออก',
                         style: kAppTextStyle,
                       ),
                     ),
@@ -277,38 +259,62 @@ class _ScoreScreenState extends State<ScoreScreen> {
                   SizedBox(
                     width: 5,
                   ),
-                  RaisedButton(
-                    color: Colors.blueGrey,
-                    onPressed: () {
-                      cart.clear();
-                      firestore
-                          .collection('scenarios')
-                          .doc(scenarioQueue.items[nextIndex])
-                          .get()
-                          .then((DocumentSnapshot snapshot) {
-                        if (snapshot.exists) {
-                          return Navigator.pushNamed(
-                            context,
-                            '/get-ready',
-                            arguments: ScenarioArguments(
-                                snapshot.id,
-                                (snapshot.data() as Map)['title'],
-                                (snapshot.data() as Map)['answers'].length,
-                                args.sessionId),
-                          );
-                        }
-                      });
-                    },
-                    child: Padding(
-                      padding: const EdgeInsets.all(8.0),
-                      child: Text(
-                        'ต่อไป',
-                        style: kAppTextStyle,
-                      ),
-                    ),
-                  ),
                 ],
               ),
+            ),
+            Padding(
+              padding: EdgeInsets.all(10.0),
+              child:
+                  Row(mainAxisAlignment: MainAxisAlignment.center, children: [
+                RaisedButton(
+                  color: Colors.pinkAccent,
+                  onPressed: () {
+                    cart.clear();
+                    return Navigator.pushNamed(context, '/scenarios',
+                        arguments: SessionArguments(args.sessionId));
+                  },
+                  child: Padding(
+                    padding: const EdgeInsets.all(8.0),
+                    child: Text(
+                      'ออก',
+                      style: kAppTextStyle,
+                    ),
+                  ),
+                ),
+                SizedBox(
+                  width: 5,
+                ),
+                RaisedButton(
+                  color: Colors.blueGrey,
+                  onPressed: () {
+                    cart.clear();
+                    firestore
+                        .collection('scenarios')
+                        .doc(scenarioQueue.items[nextIndex])
+                        .get()
+                        .then((DocumentSnapshot snapshot) {
+                      if (snapshot.exists) {
+                        return Navigator.pushNamed(
+                          context,
+                          '/get-ready',
+                          arguments: ScenarioArguments(
+                              snapshot.id,
+                              (snapshot.data() as Map)['title'],
+                              (snapshot.data() as Map)['answers'].length,
+                              args.sessionId),
+                        );
+                      }
+                    });
+                  },
+                  child: Padding(
+                    padding: const EdgeInsets.all(8.0),
+                    child: Text(
+                      'ต่อไป',
+                      style: kAppTextStyle,
+                    ),
+                  ),
+                ),
+              ]),
             )
           ],
         ),
